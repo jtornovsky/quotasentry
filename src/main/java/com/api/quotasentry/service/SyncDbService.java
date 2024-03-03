@@ -19,7 +19,7 @@ public class SyncDbService {
         this.dataServiceFactory = dataServiceFactory;
     }
 
-    @Scheduled(initialDelay = 60, fixedRate = 60) // run every 10 minutes
+    @Scheduled(initialDelay = 60000, fixedRate = 600000) // runs every 10 minutes
     public void synchronizeDatabases() {
         log.info("Sync job started.");
         SyncDataService activeDataService = (SyncDataService)dataServiceFactory.getActiveDataService();
