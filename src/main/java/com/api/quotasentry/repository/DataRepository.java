@@ -4,6 +4,10 @@ import com.api.quotasentry.model.User;
 
 import java.util.List;
 
+/**
+ * contract for all repositories
+ * wasn't used JpaRepository due to assignment constraints
+ */
 interface DataRepository {
     void createUser(User user);
     User getUser(String id);

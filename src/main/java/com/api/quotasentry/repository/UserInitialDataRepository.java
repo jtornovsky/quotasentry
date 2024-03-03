@@ -13,11 +13,12 @@ public class UserInitialDataRepository extends RdbDataRepository {
     private final ConnectionProvider connectionProvider;
 
     public UserInitialDataRepository(ConnectionProvider connectionProvider) {
+        super("user_initial_data");
         this.connectionProvider = connectionProvider;
     }
 
     public List<User> getUserInitialData() {
-        return getUsers("user_initial_data", connectionProvider);
+        return getUsers(connectionProvider);
     }
 
 }

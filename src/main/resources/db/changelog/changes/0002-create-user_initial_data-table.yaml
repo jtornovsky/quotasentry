@@ -39,6 +39,14 @@ databaseChangeLog:
                   defaultValueComputed: false
                   constraints:
                     nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modified
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
 
       rollback:
         - dropTable:

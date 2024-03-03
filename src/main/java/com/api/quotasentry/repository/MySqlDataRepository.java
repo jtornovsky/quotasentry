@@ -4,6 +4,7 @@ import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,25 +14,28 @@ import java.util.List;
 @Repository
 public class MySqlDataRepository extends RdbDataRepository implements DataRepository {
 
+    private final static String USER_TABLE = "user";
+    private final String INSERT_USER_SQL = "INSERT INTO " + USER_TABLE + " (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked) VALUES (?, ?, ?, ?, ?, ?)";
+
     private final ConnectionProvider connectionProvider;
 
     @Autowired
     public MySqlDataRepository(ConnectionProvider connectionProvider) {
+        super(USER_TABLE);
         this.connectionProvider = connectionProvider;
     }
 
     @Override
     public void createUser(User user) {
+        User usr = getUser(user.getId());
+        if (usr != null) {
+            log.info("User {} already exists, nothing to create", user.getId());
+            return;
+        }
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "INSERT INTO user (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked) VALUES (?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, user.getId());
-                statement.setString(2, user.getFirstName());
-                statement.setString(3, user.getLastName());
-                statement.setTimestamp(4, Timestamp.valueOf(user.getLastLoginTimeUtc()));
-                statement.setInt(5, user.getRequests());
-                statement.setBoolean(6, user.isLocked());
-                statement.executeUpdate();
+            try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
+                mapUserToPreparedStatement(preparedStatement, user);
+                preparedStatement.executeUpdate();
             }
             log.info("User {} created", user);
         } catch (SQLException e) {
@@ -41,24 +45,14 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
 
     @Override
     public User getUser(String id) {
-        try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "SELECT * FROM user WHERE id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, id);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        return mapUserFromResultSet(resultSet);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            log.error("Failed to retrieve user " + id, e);
-        }
-        log.info("User with id {} not found", id);
-        return null;
+        return super.getUser(id, connectionProvider);
     }
 
     public void saveUsers(List<User> users) {
+        if (CollectionUtils.isEmpty(users)) {
+            log.info("Empty users list, nothing to save");
+            return;
+        }
         for (User user : users) {
             saveUser(user.getId(), user, connectionProvider);
         }
@@ -71,8 +65,13 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
 
     @Override
     public void deleteUser(String id) {
+        User usr = getUser(id);
+        if (usr == null) {
+            log.info("User {} doesn't exist, nothing to delete", id);
+            return;
+        }
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "DELETE FROM user WHERE id = ?";
+            String sql = "DELETE FROM " + USER_TABLE + " WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, id);
                 statement.executeUpdate();
@@ -85,8 +84,13 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
 
     @Override
     public void consumeQuota(String id) {
+        User usr = getUser(id);
+        if (usr == null) {
+            log.info("User {} doesn't exist, nothing to consume", id);
+            return;
+        }
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "UPDATE user SET requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() WHERE id = ?";
+            String sql = "UPDATE " + USER_TABLE + " SET requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, id);
                 statement.executeUpdate();
@@ -131,12 +135,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
         try (Connection connection = connectionProvider.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
             for (User user : users) {
-                preparedStatement.setString(1, user.getId());
-                preparedStatement.setString(2, user.getFirstName());
-                preparedStatement.setString(3, user.getLastName());
-                preparedStatement.setObject(4, user.getLastLoginTimeUtc());
-                preparedStatement.setInt(5, user.getRequests());
-                preparedStatement.setBoolean(6, user.isLocked());
+                mapUserToPreparedStatement(preparedStatement, user);
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -146,6 +145,6 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
     }
 
     public List<User> getUsers() {
-        return super.getUsers("user", connectionProvider);
+        return super.getUsers(connectionProvider);
     }
 }

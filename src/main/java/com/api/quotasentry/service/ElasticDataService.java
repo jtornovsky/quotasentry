@@ -69,6 +69,6 @@ class ElasticDataService implements DataService, AdminDataService, SyncDataServi
 
     @Override
     public void saveUsers(List<User> users) {
-//        elasticDataRepository
+        elasticDataRepository.saveUsers(users);
     }
 }

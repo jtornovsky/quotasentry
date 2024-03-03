@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Entity
 @Table(name = "user")
@@ -40,10 +41,10 @@ public class User {
 
     @Column(name = "created", nullable = false, updatable = false)
     @CreatedDate
-    protected LocalDateTime created = LocalDateTime.now();
+    protected LocalDateTime created = LocalDateTime.now(ZoneOffset.UTC);
 
     @Column(name = "modified", nullable = false)
     @LastModifiedDate
-    protected LocalDateTime modified = LocalDateTime.now();
+    protected LocalDateTime modified = LocalDateTime.now(ZoneOffset.UTC);
 }
 

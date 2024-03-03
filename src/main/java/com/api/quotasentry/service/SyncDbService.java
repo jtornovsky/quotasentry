@@ -1,6 +1,5 @@
 package com.api.quotasentry.service;
 
-import com.api.quotasentry.model.DbType;
 import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service syncs the Data bases: updates the currently not active db with the data of the active one.
+ */
 @Slf4j
 @Service
 public class SyncDbService {
@@ -19,7 +21,7 @@ public class SyncDbService {
         this.dataServiceFactory = dataServiceFactory;
     }
 
-    @Scheduled(initialDelay = 60000, fixedRate = 600000) // runs every 10 minutes
+    @Scheduled(initialDelay = 600000, fixedRate = 600000) // runs every 10 minutes
     public void synchronizeDatabases() {
         log.info("Sync job started.");
         SyncDataService activeDataService = (SyncDataService)dataServiceFactory.getActiveDataService();

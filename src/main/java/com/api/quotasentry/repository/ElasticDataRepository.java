@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,10 @@ public class ElasticDataRepository implements DataRepository {
 
     @Override
     public void createUser(User user) {
+        if (usersMap.containsKey(user.getId())) {
+            log.info("User {} already exists, nothing to create", user.getId());
+            return;
+        }
         usersMap.put(user.getId(), user);
         log.info("User {} created", user);
     }
@@ -33,37 +38,41 @@ public class ElasticDataRepository implements DataRepository {
 
     @Override
     public void updateUser(String id, User updatedUser) {
-        if (usersMap.containsKey(id)) {
-            updatedUser.setModified(LocalDateTime.now());
-            usersMap.put(id, updatedUser);
-            log.info("User {} updated", id);
+        if (!usersMap.containsKey(id)) {
+            log.info("User with id {} not found, so not updated", id);
             return;
         }
-        log.info("User with id {} not found, so not updated", id);
+        User currentUser = usersMap.get(id);
+        if (currentUser.getModified().isBefore(updatedUser.getModified())) {
+            usersMap.put(id, updatedUser);
+            log.info("User {} updated", id);
+        } else {
+            log.info("User {} not updated as a data to update is older than user has", id);
+        }
     }
 
     @Override
     public void deleteUser(String id) {
-        if (usersMap.containsKey(id)) {
-            usersMap.remove(id);
-            log.info("User {} deleted", id);
+        if (!usersMap.containsKey(id)) {
+            log.info("User with id {} not found, so not deleted", id);
             return;
         }
-        log.info("User with id {} not found, so not deleted", id);
+        usersMap.remove(id);
+        log.info("User {} deleted", id);
     }
 
     @Override
     public void consumeQuota(String id) {
-        if (usersMap.containsKey(id)) {
-            User user = usersMap.get(id);
-            int currentRequests = user.getRequests();
-            user.setRequests(currentRequests + 1);
-            user.setLastLoginTimeUtc(LocalDateTime.now());
-            user.setModified(LocalDateTime.now());
-            log.info("Quota consumed for the user {}", id);
+        if (!usersMap.containsKey(id)) {
+            log.info("User with id {} not found, so quota not consumed", id);
             return;
         }
-        log.info("User with id {} not found, so quota not consumed", id);
+        User user = usersMap.get(id);
+        int currentRequests = user.getRequests();
+        user.setRequests(currentRequests + 1);
+        user.setLastLoginTimeUtc(LocalDateTime.now(ZoneOffset.UTC));
+        user.setModified(LocalDateTime.now(ZoneOffset.UTC));
+        log.info("Quota consumed for the user {}", id);
     }
 
     @Override

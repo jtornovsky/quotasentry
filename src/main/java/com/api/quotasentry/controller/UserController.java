@@ -43,4 +43,15 @@ public class UserController {
         UserDTO userDTO = dbService.getUser(userId);
         return ResponseEntity.ok().body(JsonUtils.toJson(userDTO));
     }
+
+//    @PostMapping("create")
+//    public ResponseEntity<String> createUser() {
+//        dbService.createUser();
+//        return ResponseEntity.ok().body("User created " + userId);
+//    }
+//
+//    public ResponseEntity<String> updateUser() {
+//        dbService.updateUser();
+//        return ResponseEntity.ok().body("User updated " + userId);
+//    }
 }
