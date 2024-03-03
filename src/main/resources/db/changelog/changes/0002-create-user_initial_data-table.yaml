@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0002-create-user_initial_data-table
+      author: jtornovsky
+      changes:
+        - createTable:
+            tableName: user_initial_data
+            columns:
+              - column:
+                  name: firstName
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastName
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastLoginTimeUtc
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: requests
+                  type: INT
+                  defaultValueComputed: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isLocked
+                  type: BOOLEAN
+                  defaultValueComputed: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: targetDb
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+      rollback:
+        - dropTable:
+          tableName: [ 'user_initial_data' ]

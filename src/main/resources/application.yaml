@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+    path: /error
+
+quota:
+  MAX_ALLOWED_REQUESTS: 5
+  MY_SQL_DB_START_HOUR: 9
+  MY_SQL_DB_END_HOUR: 17
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/quotasentrydb?useSSL=false
+    username: root
+    password: root
+  autoconfigure:
+    exclude=org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
+  application:
+    name: quotasentry
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+

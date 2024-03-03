@@ -1,0 +1,105 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0003-seed-data-to-user_initial_data-table
+      author: jtornovsky
+      changes:
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('John', 'Doe', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Jane', 'Smith', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Michael', 'Johnson', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Jessica', 'Williams', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('William', 'Brown', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Jennifer', 'Jones', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('James', 'Garcia', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Mary', 'Davis', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('David', 'Rodriguez', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Patricia', 'Martinez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Richard', 'Hernandez', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Linda', 'Lopez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Christopher', 'Lee', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Barbara', 'Gonzalez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Daniel', 'Harris', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Elizabeth', 'Clark', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Matthew', 'Lewis', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Helen', 'Robinson', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Anthony', 'Walker', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Margaret', 'Young', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Aaron', 'Ward', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Deborah', 'Mitchell', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Jerry', 'Stewart', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Marilyn', 'Perez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Randy', 'Anderson', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Janet', 'Smith', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Harry', 'Allen', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Julie', 'Diaz', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Samuel', 'Walker', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Nicole', 'Ward', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Joseph', 'Johnson', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Evelyn', 'Rodriguez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Eugene', 'Barnes', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Amanda', 'Stewart', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Kathy', 'Mitchell', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Juan', 'Martinez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Henry', 'Young', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Gloria', 'Scott', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Douglas', 'Morris', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Anne', 'Adams', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Thomas', 'Mitchell', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Kathy', 'Perez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Brenda', 'Diaz', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Randy', 'Taylor', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Donna', 'Perez', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Benjamin', 'Evans', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Christine', 'Hall', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Stephen', 'Martinez', NOW(), 0, false, 'Elastic')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Denise', 'Sanchez', NOW(), 0, false, 'MySql')
+        - sql:
+            - INSERT INTO user_initial_data (firstName, lastName, lastLoginTimeUtc, requests, isLocked, targetDb) VALUES ('Serge', 'Kapulsky', NOW(), 0, false, 'Elastic')
