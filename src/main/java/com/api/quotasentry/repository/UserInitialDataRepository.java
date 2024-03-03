@@ -1,7 +1,6 @@
 package com.api.quotasentry.repository;
 
-import com.api.quotasentry.model.DbType;
-import com.api.quotasentry.model.UserInitialData;
+import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -23,21 +22,20 @@ public class UserInitialDataRepository {
         this.connectionProvider = connectionProvider;
     }
 
-    public List<UserInitialData> findUserInitialDataByTargetDb(DbType targetDb) {
-        List<UserInitialData> userInitialDataList = new ArrayList<>();
+    public List<User> findUserInitialDataByTargetDb() {
+        List<User> userInitialDataList = new ArrayList<>();
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "SELECT * FROM user_initial_data WHERE targetDb = ?";
+            String sql = "SELECT * FROM user_initial_data";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, targetDb.name());
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        UserInitialData userInitialData = new UserInitialData();
+                        User userInitialData = new User();
+                        userInitialData.setId(resultSet.getString("id"));
                         userInitialData.setFirstName(resultSet.getString("firstName"));
                         userInitialData.setLastName(resultSet.getString("lastName"));
                         userInitialData.setLastLoginTimeUtc(resultSet.getObject("lastLoginTimeUtc", LocalDateTime.class));
                         userInitialData.setRequests(resultSet.getInt("requests"));
                         userInitialData.setLocked(resultSet.getBoolean("isLocked"));
-                        userInitialData.setTargetDb(targetDb);
                         userInitialDataList.add(userInitialData);
                     }
                 }

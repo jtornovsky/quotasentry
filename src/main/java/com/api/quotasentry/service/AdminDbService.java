@@ -14,11 +14,13 @@ public class AdminDbService {
 
     private final MySqlDataService mySqlDataService;
     private final ElasticDataService elasticDataService;
+    private final UserInitialDataService userInitialDataService;
 
     @Autowired
-    public AdminDbService(MySqlDataService mySqlDataService, ElasticDataService elasticDataService) {
+    public AdminDbService(MySqlDataService mySqlDataService, ElasticDataService elasticDataService, UserInitialDataService userInitialDataService) {
         this.mySqlDataService = mySqlDataService;
         this.elasticDataService = elasticDataService;
+        this.userInitialDataService = userInitialDataService;
     }
 
     public void deleteDataFromDbs() {
@@ -28,8 +30,9 @@ public class AdminDbService {
 
     public void seedDataToDbs() {
         deleteDataFromDbs();
-        mySqlDataService.seedDataToDb();
-        elasticDataService.seedDataToDb();
+        List<User> users = userInitialDataService.getUserInitialDataByTargetDb();
+        mySqlDataService.seedDataToDb(users);
+        elasticDataService.seedDataToDb(users);
     }
 
     public List<User> getDataFromDb(DbType dbType) {

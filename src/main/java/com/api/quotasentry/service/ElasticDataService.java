@@ -1,14 +1,11 @@
 package com.api.quotasentry.service;
 
-import com.api.quotasentry.model.DbType;
 import com.api.quotasentry.model.User;
-import com.api.quotasentry.model.UserInitialData;
 import com.api.quotasentry.repository.ElasticDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Elastic's implementation of the DataService and AdminDataService interfaces
@@ -61,17 +58,7 @@ class ElasticDataService implements DataService, AdminDataService {
     }
 
     @Override
-    public void seedDataToDb() {
-        List<UserInitialData> userInitialDataList = userInitialDataService.getUserInitialDataByTargetDb(DbType.Elastic);
-        for (UserInitialData userInitialData : userInitialDataList) {
-            User user = new User();
-            user.setId(UUID.randomUUID().toString());
-            user.setFirstName(userInitialData.getFirstName());
-            user.setLastName(userInitialData.getLastName());
-            user.setLastLoginTimeUtc(userInitialData.getLastLoginTimeUtc());
-            user.setLocked(false);
-            user.setRequests(0);
-            elasticDataRepository.createUser(user);
-        }
+    public void seedDataToDb(List<User> users) {
+        users.forEach(user -> elasticDataRepository.createUser(user));
     }
 }

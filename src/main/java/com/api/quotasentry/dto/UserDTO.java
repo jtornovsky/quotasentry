@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    protected String firstName;
-    protected String lastName;
-    protected LocalDateTime lastLoginTimeUtc;
-    protected int requests;
-    protected boolean isLocked;
+    private String id;
+    private String firstName;
+    private String lastName;
+    private LocalDateTime lastLoginTimeUtc;
+    private int requests;
+    private boolean isLocked;
 }

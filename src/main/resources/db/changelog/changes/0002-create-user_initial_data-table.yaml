@@ -7,6 +7,14 @@ databaseChangeLog:
             tableName: user_initial_data
             columns:
               - column:
+                  name: id
+                  type: VARCHAR(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    updatable: false
+                    unique: true
+              - column:
                   name: firstName
                   type: VARCHAR(50)
                   constraints:
@@ -32,11 +40,6 @@ databaseChangeLog:
                   name: isLocked
                   type: BOOLEAN
                   defaultValueComputed: false
-                  constraints:
-                    nullable: false
-              - column:
-                  name: targetDb
-                  type: VARCHAR(50)
                   constraints:
                     nullable: false
 

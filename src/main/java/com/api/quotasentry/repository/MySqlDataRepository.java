@@ -96,7 +96,7 @@ public class MySqlDataRepository implements DataRepository {
     @Override
     public void consumeQuota(String id) {
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "UPDATE user SET requests = requests + 1 WHERE id = ?";
+            String sql = "UPDATE user SET requests = requests + 1, lastLoginTimeUtc = NOW() WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, id);
                 statement.executeUpdate();

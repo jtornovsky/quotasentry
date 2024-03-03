@@ -1,15 +1,11 @@
 package com.api.quotasentry.service;
 
-import com.api.quotasentry.model.DbType;
 import com.api.quotasentry.model.User;
-import com.api.quotasentry.model.UserInitialData;
 import com.api.quotasentry.repository.MySqlDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * MySQL's implementation of the DataService and AdminDataService interfaces
@@ -18,12 +14,10 @@ import java.util.UUID;
 class MySqlDataService implements DataService, AdminDataService {
 
     private final MySqlDataRepository mySqlDataRepository;
-    private final UserInitialDataService userInitialDataService;
 
     @Autowired
-    MySqlDataService(MySqlDataRepository mySqlDataRepository, UserInitialDataService userInitialDataService) {
+    MySqlDataService(MySqlDataRepository mySqlDataRepository) {
         this.mySqlDataRepository = mySqlDataRepository;
-        this.userInitialDataService = userInitialDataService;
     }
 
     @Override
@@ -62,19 +56,7 @@ class MySqlDataService implements DataService, AdminDataService {
     }
 
     @Override
-    public void seedDataToDb() {
-        List<UserInitialData> userInitialDataList = userInitialDataService.getUserInitialDataByTargetDb(DbType.Mysql);
-        List<User> users = new ArrayList<>();
-        for (UserInitialData userInitialData : userInitialDataList) {
-            User user = new User();
-            user.setId(UUID.randomUUID().toString());
-            user.setFirstName(userInitialData.getFirstName());
-            user.setLastName(userInitialData.getLastName());
-            user.setLastLoginTimeUtc(userInitialData.getLastLoginTimeUtc());
-            user.setRequests(0);
-            user.setLocked(false);
-            users.add(user);
-        }
+    public void seedDataToDb(List<User> users) {
         mySqlDataRepository.seedDataToDb(users);
     }
 }

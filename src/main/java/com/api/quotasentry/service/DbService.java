@@ -1,12 +1,15 @@
 package com.api.quotasentry.service;
 
+import com.api.quotasentry.dto.UserDTO;
 import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -15,12 +18,14 @@ public class DbService {
     private final int MAX_ALLOWED_REQUESTS;
 
     private final DataServiceFactory dataServiceFactory;
+    private final UserService userService;
 
     @Autowired
     public DbService(@Value("${quota.MAX_ALLOWED_REQUESTS}") final int MAX_ALLOWED_REQUESTS,
-                     DataServiceFactory dataServiceFactory) {
+                     DataServiceFactory dataServiceFactory, UserService userService) {
         this.MAX_ALLOWED_REQUESTS = MAX_ALLOWED_REQUESTS;
         this.dataServiceFactory = dataServiceFactory;
+        this.userService = userService;
     }
 
     public void createUser(User user) {
@@ -28,9 +33,10 @@ public class DbService {
         dataService.createUser(user);
     }
 
-    public User getUser(String id) {
+    public UserDTO getUser(String id) {
         DataService dataService = dataServiceFactory.getDataService();
-        return dataService.getUser(id);
+        User user = dataService.getUser(id);
+        return userService.convertUserToUserDto(user);
     }
 
     public void updateUser(String id, User updatedUser) {
@@ -62,8 +68,11 @@ public class DbService {
         dataService.consumeQuota(id);
     }
 
-    public List<User> getUsersQuota() {
+    public List<UserDTO> getUsersQuota() {
         DataService dataService = dataServiceFactory.getDataService();
-        return dataService.getUsersQuota();
+        List<User> usersList = dataService.getUsersQuota();
+        return usersList.stream()
+                .map(userService::convertUserToUserDto)
+                .collect(Collectors.toList());
     }
 }

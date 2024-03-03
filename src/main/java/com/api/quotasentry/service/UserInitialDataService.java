@@ -1,9 +1,6 @@
 package com.api.quotasentry.service;
 
-import com.api.quotasentry.model.DbType;
 import com.api.quotasentry.model.User;
-import com.api.quotasentry.model.UserInitialData;
-import com.api.quotasentry.repository.MySqlDataRepository;
 import com.api.quotasentry.repository.UserInitialDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +20,7 @@ class UserInitialDataService {
         this.userInitialDataRepository = userInitialDataRepository;
     }
 
-    List<UserInitialData> getUserInitialDataByTargetDb(DbType targetDb) {
-        return userInitialDataRepository.findUserInitialDataByTargetDb(targetDb);
+    List<User> getUserInitialDataByTargetDb() {
+        return userInitialDataRepository.findUserInitialDataByTargetDb();
     }
 }

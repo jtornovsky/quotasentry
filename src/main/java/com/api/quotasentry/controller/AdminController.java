@@ -7,13 +7,13 @@ import com.api.quotasentry.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * The controller used only for Admin purposes and out of scope of the task requirements
+ */
 @Slf4j
 @RestController
 @RequestMapping("admin")
@@ -33,7 +33,7 @@ public class AdminController {
      *
      * @return
      */
-    @GetMapping("delete") // todo change to @PostMapping when all works
+    @DeleteMapping("delete")
     public ResponseEntity<String> deleteDataFromDbs() {
         adminDbService.deleteDataFromDbs();
         return ResponseEntity.ok().body("Data deleted from both DBs");
@@ -46,7 +46,7 @@ public class AdminController {
      *
      * @return
      */
-    @GetMapping("seed") // todo change to @PostMapping when all works
+    @PutMapping("seed")
     public ResponseEntity<String> seedDataToDbs() {
         adminDbService.seedDataToDbs();
         return ResponseEntity.ok().body("Data seeded to both DBs");
