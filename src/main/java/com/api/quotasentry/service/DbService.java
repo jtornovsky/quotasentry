@@ -29,12 +29,20 @@ public class DbService {
 
     public void createUser(User user) {
         DataService dataService = dataServiceFactory.getActiveDataService();
+        if (user == null) {
+            log.error("User to create is null");
+            return;
+        }
         dataService.createUser(user);
     }
 
     public UserDTO getUser(String id) {
         DataService dataService = dataServiceFactory.getActiveDataService();
         User user = dataService.getUser(id);
+        if (user == null) {
+            log.error("User {} doesn't exist", id);
+            return null;
+        }
         return userService.convertUserToUserDto(user);
     }
 
@@ -52,6 +60,7 @@ public class DbService {
         DataService dataService = dataServiceFactory.getActiveDataService();
         User user = dataService.getUser(id);
         if (user == null) {
+            log.error("User {} doesn't exist", id);
             return;
         }
         if (user.isLocked()) {

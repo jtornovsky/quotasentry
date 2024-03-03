@@ -4,7 +4,6 @@ import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +29,7 @@ abstract class RdbDataRepository {
                 }
             }
         } catch (SQLException e) {
-            log.error("Failed to retrieve user " + id, e);
+            handleSqlException(e, "Failed to retrieve user " + id);
         }
         log.info("User with id {} not found", id);
         return null;
@@ -49,7 +48,7 @@ abstract class RdbDataRepository {
                 }
             }
         } catch (SQLException e) {
-            log.error("Failed to retrieve user data from table " + TABLE_NAME, e);
+            handleSqlException(e, "Failed to retrieve user data from table " + TABLE_NAME);
         }
         log.info("User data retrieved from table {}", TABLE_NAME);
         return userInitialDataList;
@@ -65,11 +64,7 @@ abstract class RdbDataRepository {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE " + TABLE_NAME + " SET firstName = ?, lastName = ?, lastLoginTimeUtc = ?, requests = ?, isLocked = ?, modified = NOW() WHERE id = ?")) {
                 statement.setString(1, user.getFirstName());
                 statement.setString(2, user.getLastName());
-                if (user.getLastLoginTimeUtc() == null) {
-                    statement.setString(3, null);
-                } else {
-                    statement.setTimestamp(3, Timestamp.valueOf(user.getLastLoginTimeUtc()));
-                }
+                statement.setObject(3, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
                 statement.setInt(4, user.getRequests());
                 statement.setBoolean(5, user.isLocked());
                 statement.setString(6, id);
@@ -77,7 +72,7 @@ abstract class RdbDataRepository {
             }
             log.info("User {} saved: {}", id, user);
         } catch (SQLException e) {
-            log.error("Failed to save user " + id + ", " + user, e);
+            handleSqlException(e, "Failed to save user " + id + ", " + user);
         }
     }
 
@@ -99,12 +94,16 @@ abstract class RdbDataRepository {
         preparedStatement.setString(1, user.getId());
         preparedStatement.setString(2, user.getFirstName());
         preparedStatement.setString(3, user.getLastName());
-        if (user.getLastLoginTimeUtc() == null) {
-            preparedStatement.setString(4, null);
-        } else {
-            preparedStatement.setTimestamp(4, Timestamp.valueOf(user.getLastLoginTimeUtc()));
-        }
+        preparedStatement.setObject(4, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
         preparedStatement.setInt(5, user.getRequests());
         preparedStatement.setBoolean(6, user.isLocked());
+        preparedStatement.setObject(7, user.getCreated());
+        preparedStatement.setObject(8, user.getModified());
+    }
+
+    protected void handleSqlException(SQLException e, String message) {
+        log.error(message, e);
+        throw new RuntimeException(e);
     }
 }
+

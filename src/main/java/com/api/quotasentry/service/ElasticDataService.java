@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Elastic's implementation of the DataService and AdminDataService interfaces
+ * Elastic's implementation of the DB
  */
 @Service
 class ElasticDataService implements DataService, AdminDataService, SyncDataService {

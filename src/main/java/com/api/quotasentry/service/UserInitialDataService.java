@@ -20,7 +20,7 @@ class UserInitialDataService {
         this.userInitialDataRepository = userInitialDataRepository;
     }
 
-    List<User> getUserInitialDataByTargetDb() {
+    List<User> getUserInitialData() {
         return userInitialDataRepository.getUserInitialData();
     }
 }

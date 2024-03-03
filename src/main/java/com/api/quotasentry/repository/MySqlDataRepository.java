@@ -3,6 +3,7 @@ package com.api.quotasentry.repository;
 import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -15,7 +16,11 @@ import java.util.List;
 public class MySqlDataRepository extends RdbDataRepository implements DataRepository {
 
     private final static String USER_TABLE = "user";
-    private final String INSERT_USER_SQL = "INSERT INTO " + USER_TABLE + " (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked) VALUES (?, ?, ?, ?, ?, ?)";
+    private final static String INSERT_USER_SQL = "INSERT INTO " + USER_TABLE + " (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private final static String DELETE_USER_SQL = "DELETE FROM " + USER_TABLE + " WHERE id = ?";
+    private final static String DELETE_ALL_USERS = "DELETE FROM " + USER_TABLE;
+    private final static String UPDATE_USER_SQL = "UPDATE " + USER_TABLE + " SET requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() WHERE id = ?";
+    private final static String SELECT_ALL_USERS_SQL = "SELECT * FROM " + USER_TABLE;
 
     private final ConnectionProvider connectionProvider;
 
@@ -29,7 +34,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
     public void createUser(User user) {
         User usr = getUser(user.getId());
         if (usr != null) {
-            log.info("User {} already exists, nothing to create", user.getId());
+            log.warn("User {} already exists, nothing to create", user.getId());
             return;
         }
         try (Connection connection = connectionProvider.getConnection()) {
@@ -39,7 +44,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
             }
             log.info("User {} created", user);
         } catch (SQLException e) {
-            log.error("Failed to create user " + user, e);
+            handleSqlException(e, "Failed to create user " + user);
         }
     }
 
@@ -50,7 +55,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
 
     public void saveUsers(List<User> users) {
         if (CollectionUtils.isEmpty(users)) {
-            log.info("Empty users list, nothing to save");
+            log.warn("Empty users list, nothing to save");
             return;
         }
         for (User user : users) {
@@ -67,18 +72,16 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
     public void deleteUser(String id) {
         User usr = getUser(id);
         if (usr == null) {
-            log.info("User {} doesn't exist, nothing to delete", id);
+            log.error("User {} doesn't exist, nothing to delete", id);
             return;
         }
-        try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "DELETE FROM " + USER_TABLE + " WHERE id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, id);
-                statement.executeUpdate();
-            }
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_USER_SQL)) {
+            statement.setString(1, id);
+            statement.executeUpdate();
             log.info("User {} deleted", id);
         } catch (SQLException e) {
-            log.error("Failed to delete user " + id, e);
+            handleSqlException(e, "Failed to delete user " + id);
         }
     }
 
@@ -86,48 +89,41 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
     public void consumeQuota(String id) {
         User usr = getUser(id);
         if (usr == null) {
-            log.info("User {} doesn't exist, nothing to consume", id);
+            log.error("User {} doesn't exist, nothing to consume", id);
             return;
         }
-        try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "UPDATE " + USER_TABLE + " SET requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() WHERE id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, id);
-                statement.executeUpdate();
-            }
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_SQL)) {
+            statement.setString(1, id);
+            statement.executeUpdate();
             log.info("Quota consumed for the user {}", id);
         } catch (SQLException e) {
-            log.error("Failed to set quota for the user " + id, e);
+            handleSqlException(e, "Failed to set quota for the user " + id);
         }
     }
 
     @Override
     public List<User> getUsersQuota() {
         List<User> users = new ArrayList<>();
-        try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "SELECT * FROM user";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-                        users.add(mapUserFromResultSet(resultSet));
-                    }
-                }
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_USERS_SQL);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                users.add(mapUserFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            log.error("Failed to get users quota.", e);
+            handleSqlException(e, "Failed to get users quota.");
         }
         return users;
     }
 
     public void deleteDataFromDb() {
-        try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "DELETE FROM user";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.executeUpdate();
-            }
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_ALL_USERS)) {
+            statement.executeUpdate();
             log.info("All users deleted");
         } catch (SQLException e) {
-            log.error("Failed to delete users", e);
+            handleSqlException(e, "Failed to delete users");
         }
     }
 
@@ -139,8 +135,9 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
+            log.info("Seeded {} users", users.size());
         } catch (SQLException e) {
-            log.error("Failed to seed users data", e);
+            handleSqlException(e, "Failed to seed users data");
         }
     }
 

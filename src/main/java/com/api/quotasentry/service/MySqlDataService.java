@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * MySQL's implementation of the DataService and AdminDataService interfaces
+ * MySQL's implementation of the DB
  */
 @Service
 class MySqlDataService implements DataService, AdminDataService, SyncDataService {

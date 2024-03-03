@@ -5,7 +5,7 @@ import com.api.quotasentry.model.User;
 import java.util.List;
 
 /**
- * contract for all repositories
+ * contract for all DB repositories
  * wasn't used JpaRepository due to assignment constraints
  */
 interface DataRepository {

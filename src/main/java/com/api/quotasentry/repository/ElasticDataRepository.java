@@ -15,6 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class ElasticDataRepository implements DataRepository {
 
+    /**
+     * simulates Elastic DB
+     */
     private final Map<String, User> usersMap = new ConcurrentHashMap<>();
 
     @Override
