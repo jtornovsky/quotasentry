@@ -30,8 +30,17 @@ class DataServiceFactory {
         this.elasticDataService = elasticDataService;
     }
 
-    DataService getDataService() {
-        DbType dbType = getWorkingDbType();
+    DataService getActiveDataService() {
+        return getDataService(true);
+    }
+
+    DataService getNotActiveDataService() {
+        return getDataService(false);
+    }
+
+    private DataService getDataService(boolean isActiveService) {
+        LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
+        DbType dbType = getDbType(currentTime, isActiveService);
         switch (dbType) {
             case Mysql -> {
                 return mySqlDataService;
@@ -43,12 +52,18 @@ class DataServiceFactory {
         }
     }
 
-    private DbType getWorkingDbType() {
+    private DbType getDbType(LocalDateTime currentTime, boolean isActiveService) {
         // implements logic to check if the current time is within the MySQL time range (from 9:00 - 17:00 UTC)
-        LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
         if (currentTime.getHour() >= MY_SQL_DB_START_HOUR && currentTime.getHour() <= MY_SQL_DB_END_HOUR) {
+            if (isActiveService) {
+                return DbType.Mysql;
+            }
+            return DbType.Elastic;
+        } else {
+            if (isActiveService) {
+                return DbType.Elastic;
+            }
             return DbType.Mysql;
         }
-        return DbType.Elastic;
     }
 }

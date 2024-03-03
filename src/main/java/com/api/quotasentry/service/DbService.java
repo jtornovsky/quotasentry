@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,28 +28,28 @@ public class DbService {
     }
 
     public void createUser(User user) {
-        DataService dataService = dataServiceFactory.getDataService();
+        DataService dataService = dataServiceFactory.getActiveDataService();
         dataService.createUser(user);
     }
 
     public UserDTO getUser(String id) {
-        DataService dataService = dataServiceFactory.getDataService();
+        DataService dataService = dataServiceFactory.getActiveDataService();
         User user = dataService.getUser(id);
         return userService.convertUserToUserDto(user);
     }
 
     public void updateUser(String id, User updatedUser) {
-        DataService dataService = dataServiceFactory.getDataService();
+        DataService dataService = dataServiceFactory.getActiveDataService();
         dataService.updateUser(id, updatedUser);
     }
 
     public void deleteUser(String id) {
-        DataService dataService = dataServiceFactory.getDataService();
+        DataService dataService = dataServiceFactory.getActiveDataService();
         dataService.deleteUser(id);
     }
 
     public void consumeQuota(String id) {
-        DataService dataService = dataServiceFactory.getDataService();
+        DataService dataService = dataServiceFactory.getActiveDataService();
         User user = dataService.getUser(id);
         if (user == null) {
             return;
@@ -69,7 +68,7 @@ public class DbService {
     }
 
     public List<UserDTO> getUsersQuota() {
-        DataService dataService = dataServiceFactory.getDataService();
+        DataService dataService = dataServiceFactory.getActiveDataService();
         List<User> usersList = dataService.getUsersQuota();
         return usersList.stream()
                 .map(userService::convertUserToUserDto)

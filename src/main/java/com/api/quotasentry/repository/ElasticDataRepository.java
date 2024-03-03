@@ -4,6 +4,7 @@ import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class ElasticDataRepository implements DataRepository {
     @Override
     public void updateUser(String id, User updatedUser) {
         if (usersMap.containsKey(id)) {
+            updatedUser.setModified(LocalDateTime.now());
             usersMap.put(id, updatedUser);
             log.info("User {} updated", id);
             return;
@@ -56,6 +58,8 @@ public class ElasticDataRepository implements DataRepository {
             User user = usersMap.get(id);
             int currentRequests = user.getRequests();
             user.setRequests(currentRequests + 1);
+            user.setLastLoginTimeUtc(LocalDateTime.now());
+            user.setModified(LocalDateTime.now());
             log.info("Quota consumed for the user {}", id);
             return;
         }
@@ -69,5 +73,13 @@ public class ElasticDataRepository implements DataRepository {
 
     public void deleteDataFromDb() {
         usersMap.clear();
+    }
+
+    public List<User> getUsers() {
+        return new ArrayList<>(usersMap.values());
+    }
+
+    public void saveUsers(List<User> users) {
+        users.stream().forEach(user -> updateUser(user.getId(), user));
     }
 }

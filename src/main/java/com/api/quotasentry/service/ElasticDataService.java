@@ -11,7 +11,7 @@ import java.util.List;
  * Elastic's implementation of the DataService and AdminDataService interfaces
  */
 @Service
-class ElasticDataService implements DataService, AdminDataService {
+class ElasticDataService implements DataService, AdminDataService, SyncDataService {
 
     private final ElasticDataRepository elasticDataRepository;
     private final UserInitialDataService userInitialDataService;
@@ -60,5 +60,15 @@ class ElasticDataService implements DataService, AdminDataService {
     @Override
     public void seedDataToDb(List<User> users) {
         users.forEach(user -> elasticDataRepository.createUser(user));
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return elasticDataRepository.getUsers();
+    }
+
+    @Override
+    public void saveUsers(List<User> users) {
+//        elasticDataRepository
     }
 }

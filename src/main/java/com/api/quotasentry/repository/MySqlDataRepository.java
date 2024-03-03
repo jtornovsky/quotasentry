@@ -11,9 +11,7 @@ import java.util.List;
 
 @Slf4j
 @Repository
-public class MySqlDataRepository implements DataRepository {
-
-    private static final String INSERT_USER_SQL = "INSERT INTO user (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked) VALUES (?, ?, ?, ?, ?, ?)";
+public class MySqlDataRepository extends RdbDataRepository implements DataRepository {
 
     private final ConnectionProvider connectionProvider;
 
@@ -60,23 +58,15 @@ public class MySqlDataRepository implements DataRepository {
         return null;
     }
 
+    public void saveUsers(List<User> users) {
+        for (User user : users) {
+            saveUser(user.getId(), user, connectionProvider);
+        }
+    }
+
     @Override
     public void updateUser(String id, User updatedUser) {
-        try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "UPDATE user SET firstName = ?, lastName = ?, lastLoginTimeUtc = ?, requests = ?, isLocked = ? WHERE id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, updatedUser.getFirstName());
-                statement.setString(2, updatedUser.getLastName());
-                statement.setTimestamp(3, Timestamp.valueOf(updatedUser.getLastLoginTimeUtc()));
-                statement.setInt(4, updatedUser.getRequests());
-                statement.setBoolean(5, updatedUser.isLocked());
-                statement.setString(6, id);
-                statement.executeUpdate();
-            }
-            log.info("User {} updated: {}", id, updatedUser);
-        } catch (SQLException e) {
-            log.error("Failed to update user " + id + ", " + updatedUser, e);
-        }
+        saveUser(id, updatedUser, connectionProvider);
     }
 
     @Override
@@ -96,7 +86,7 @@ public class MySqlDataRepository implements DataRepository {
     @Override
     public void consumeQuota(String id) {
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "UPDATE user SET requests = requests + 1, lastLoginTimeUtc = NOW() WHERE id = ?";
+            String sql = "UPDATE user SET requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, id);
                 statement.executeUpdate();
@@ -123,17 +113,6 @@ public class MySqlDataRepository implements DataRepository {
             log.error("Failed to get users quota.", e);
         }
         return users;
-    }
-
-    private User mapUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User user = new User();
-        user.setId(resultSet.getString("id"));
-        user.setFirstName(resultSet.getString("firstName"));
-        user.setLastName(resultSet.getString("lastName"));
-        user.setLastLoginTimeUtc(resultSet.getTimestamp("lastLoginTimeUtc").toLocalDateTime());
-        user.setRequests(resultSet.getInt("requests"));
-        user.setLocked(resultSet.getBoolean("isLocked"));
-        return user;
     }
 
     public void deleteDataFromDb() {
@@ -164,5 +143,9 @@ public class MySqlDataRepository implements DataRepository {
         } catch (SQLException e) {
             log.error("Failed to seed users data", e);
         }
+    }
+
+    public List<User> getUsers() {
+        return super.getUsers("user", connectionProvider);
     }
 }

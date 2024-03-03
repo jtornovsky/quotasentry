@@ -21,6 +21,6 @@ class UserInitialDataService {
     }
 
     List<User> getUserInitialDataByTargetDb() {
-        return userInitialDataRepository.findUserInitialDataByTargetDb();
+        return userInitialDataRepository.getUserInitialData();
     }
 }

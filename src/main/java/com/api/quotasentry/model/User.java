@@ -1,8 +1,15 @@
 package com.api.quotasentry.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +29,7 @@ public class User {
     @Column(name = "firstName", nullable = false)
     protected String lastName;
 
-    @Column(name = "lastLoginTimeUtc", nullable = false)
+    @Column(name = "lastLoginTimeUtc")
     protected LocalDateTime lastLoginTimeUtc;
 
     @Column(name = "requests", nullable = false)
@@ -30,5 +37,13 @@ public class User {
 
     @Column(name = "isLocked", nullable = false)
     protected boolean isLocked; // added field: whether user is locked or not
+
+    @Column(name = "created", nullable = false, updatable = false)
+    @CreatedDate
+    protected LocalDateTime created = LocalDateTime.now();
+
+    @Column(name = "modified", nullable = false)
+    @LastModifiedDate
+    protected LocalDateTime modified = LocalDateTime.now();
 }
 

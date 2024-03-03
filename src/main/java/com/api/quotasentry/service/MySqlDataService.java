@@ -11,7 +11,7 @@ import java.util.List;
  * MySQL's implementation of the DataService and AdminDataService interfaces
  */
 @Service
-class MySqlDataService implements DataService, AdminDataService {
+class MySqlDataService implements DataService, AdminDataService, SyncDataService {
 
     private final MySqlDataRepository mySqlDataRepository;
 
@@ -58,5 +58,15 @@ class MySqlDataService implements DataService, AdminDataService {
     @Override
     public void seedDataToDb(List<User> users) {
         mySqlDataRepository.seedDataToDb(users);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return mySqlDataRepository.getUsers();
+    }
+
+    @Override
+    public void saveUsers(List<User> users) {
+        mySqlDataRepository.saveUsers(users);
     }
 }
