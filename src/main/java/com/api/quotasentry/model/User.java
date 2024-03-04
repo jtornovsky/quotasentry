@@ -27,7 +27,7 @@ public class User {
     @Column(name = "firstName", nullable = false)
     protected String firstName;
 
-    @Column(name = "firstName", nullable = false)
+    @Column(name = "lastName", nullable = false)
     protected String lastName;
 
     @Column(name = "lastLoginTimeUtc")

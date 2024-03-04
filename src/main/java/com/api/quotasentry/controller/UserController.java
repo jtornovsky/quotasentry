@@ -61,6 +61,24 @@ public class UserController {
         }
     }
 
+    /**
+     * url examples.
+     *
+     * "http://localhost:8080/user/create"
+     * body:
+         {
+         "id": "179c3abc-0000-1111-aca6-7550195481ad",
+         "firstName": "AAAA",
+         "lastName": "BBBB",
+         "requests": 0,
+         "isLocked": false,
+         "isDeleted": false,
+         "created": "2024-03-01T00:00:00Z",
+         "modified": "2024-03-01T00:00:00Z"
+         }
+     *
+     * @return
+     */
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
@@ -73,6 +91,25 @@ public class UserController {
         }
     }
 
+    /**
+     * url examples.
+     *
+     * "http://localhost:8080/user/update/179c3abc-0000-1111-aca6-7550195481ad"
+     * body:
+     {
+     "id": "179c3abc-0000-1111-aca6-7550195481ad",
+     "firstName": "AAAAGGGG",
+     "lastName": "BBBBVVVVV",
+     "lastLoginTimeUtc": "2024-03-01T00:00:00Z",
+     "requests": 3,
+     "isLocked": true,
+     "isDeleted": true,
+     "created": "2024-03-01T00:00:00Z",
+     "modified": "2025-03-01T00:00:00Z"
+     }
+     *
+     * @return
+     */
     @PostMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User user) {
         try {
