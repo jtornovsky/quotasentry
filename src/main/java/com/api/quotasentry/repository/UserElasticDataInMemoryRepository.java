@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
-public class ElasticDataRepository implements DataRepository {
+public class UserElasticDataInMemoryRepository implements DataRepository {
 
     /**
      * simulates Elastic DB

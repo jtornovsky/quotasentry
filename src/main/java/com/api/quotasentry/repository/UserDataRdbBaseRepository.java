@@ -9,14 +9,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Abstract base class for repositories that interact with a relational database (RDBMS).
+ * This class provides common functionality for handling CRUD operations on a specific table/entity
+ * in a relational database.
+ * <p>
+ * This class defines abstract methods for interacting with the database that must be implemented
+ * by some of the subclasses below:
+ * <ul>
+ *     <li>{@link #getSingleUser(String)} - Retrieves a single user by ID from the database.</li>
+ *     <li>{@link #getAllUsers()} - Retrieves all users from the database.</li>
+ *     <li>{@link #saveSingleUser(String, User)} - Saves a single user to the database.</li>
+ *     <li>{@link #updateSingleUser(String, User)} - Updates a single user in the database.</li>
+ *     <li>{@link #updateMultipleUsers(List)} - Saves multiple users to the database.</li>
+ *     <li>{@link #updateMultipleUsers(List)} - Updates multiple users in the database.</li>
+ * </ul>
+ * <p>
+ * Concrete subclasses are expected to provide implementations for these abstract methods, along with any
+ * additional methods required to interact with the specific table/entity in their respective databases.
+ * <p>
+ * The actual database connection and queries are managed by implementing classes through a
+ * {@link ConnectionProvider} and {@link UserSqlQueriesHolder} respectively.
+ *
+ * @see UserMySqlDataRdbRepository
+ * @see ConnectionProvider
+ * @see UserSqlQueriesHolder
+ */
 @Slf4j
-abstract class RdbDataRepository {
+abstract class UserDataRdbBaseRepository {
 
     protected final String tableName;
     private final ConnectionProvider connectionProvider;
     protected final UserSqlQueriesHolder userSqlQueriesHolder;
 
-    protected RdbDataRepository(String tableName, ConnectionProvider connectionProvider) {
+    protected UserDataRdbBaseRepository(String tableName, ConnectionProvider connectionProvider) {
         this.tableName = tableName;
         userSqlQueriesHolder = new UserSqlQueriesHolder(tableName);
         this.connectionProvider = connectionProvider;

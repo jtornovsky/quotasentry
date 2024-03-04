@@ -1,7 +1,7 @@
 package com.api.quotasentry.service;
 
 import com.api.quotasentry.model.User;
-import com.api.quotasentry.repository.MySqlDataRepository;
+import com.api.quotasentry.repository.UserMySqlDataRdbRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 class MySqlDataService implements DataService, AdminDataService, SyncDataService {
 
-    private final MySqlDataRepository mySqlDataRepository;
+    private final UserMySqlDataRdbRepository mySqlDataRepository;
 
     @Autowired
-    MySqlDataService(MySqlDataRepository mySqlDataRepository) {
+    MySqlDataService(UserMySqlDataRdbRepository mySqlDataRepository) {
         this.mySqlDataRepository = mySqlDataRepository;
     }
 

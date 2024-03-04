@@ -1,7 +1,7 @@
 package com.api.quotasentry.service;
 
 import com.api.quotasentry.model.User;
-import com.api.quotasentry.repository.UserInitialDataRepository;
+import com.api.quotasentry.repository.UserInitialDataRdbBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 class UserInitialDataService {
 
-    private final UserInitialDataRepository userInitialDataRepository;
+    private final UserInitialDataRdbBaseRepository userInitialDataRepository;
 
     @Autowired
-    UserInitialDataService(UserInitialDataRepository userInitialDataRepository) {
+    UserInitialDataService(UserInitialDataRdbBaseRepository userInitialDataRepository) {
         this.userInitialDataRepository = userInitialDataRepository;
     }
 

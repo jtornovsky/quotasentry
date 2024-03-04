@@ -9,10 +9,10 @@ import java.util.List;
 
 @Slf4j
 @Repository
-public class MySqlDataRepository extends RdbDataRepository implements DataRepository {
+public class UserMySqlDataRdbRepository extends UserDataRdbBaseRepository implements DataRepository {
 
     @Autowired
-    public MySqlDataRepository(ConnectionProvider connectionProvider) {
+    public UserMySqlDataRdbRepository(ConnectionProvider connectionProvider) {
         super("user", connectionProvider);
     }
 

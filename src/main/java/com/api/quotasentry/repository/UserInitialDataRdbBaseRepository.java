@@ -8,9 +8,9 @@ import java.util.List;
 
 @Slf4j
 @Repository
-public class UserInitialDataRepository extends RdbDataRepository {
+public class UserInitialDataRdbBaseRepository extends UserDataRdbBaseRepository {
 
-    public UserInitialDataRepository(ConnectionProvider connectionProvider) {
+    public UserInitialDataRdbBaseRepository(ConnectionProvider connectionProvider) {
         super("user_initial_data", connectionProvider);
     }
 

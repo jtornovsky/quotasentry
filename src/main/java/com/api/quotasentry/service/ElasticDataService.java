@@ -1,7 +1,7 @@
 package com.api.quotasentry.service;
 
 import com.api.quotasentry.model.User;
-import com.api.quotasentry.repository.ElasticDataRepository;
+import com.api.quotasentry.repository.UserElasticDataInMemoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,67 +13,67 @@ import java.util.List;
 @Service
 class ElasticDataService implements DataService, AdminDataService, SyncDataService {
 
-    private final ElasticDataRepository elasticDataRepository;
+    private final UserElasticDataInMemoryRepository userElasticDataInMemoryRepository;
     private final UserInitialDataService userInitialDataService;
 
     @Autowired
-    ElasticDataService(ElasticDataRepository elasticDataRepository, UserInitialDataService userInitialDataService) {
-        this.elasticDataRepository = elasticDataRepository;
+    ElasticDataService(UserElasticDataInMemoryRepository userElasticDataInMemoryRepository, UserInitialDataService userInitialDataService) {
+        this.userElasticDataInMemoryRepository = userElasticDataInMemoryRepository;
         this.userInitialDataService = userInitialDataService;
     }
 
     @Override
     public void createUser(User user) {
-        elasticDataRepository.createUser(user);
+        userElasticDataInMemoryRepository.createUser(user);
     }
 
     @Override
     public User getUser(String id) {
-        return elasticDataRepository.getUser(id);
+        return userElasticDataInMemoryRepository.getUser(id);
     }
 
     @Override
     public void updateUser(String id, User updatedUser) {
-        elasticDataRepository.updateUser(id, updatedUser);
+        userElasticDataInMemoryRepository.updateUser(id, updatedUser);
     }
 
     @Override
     public void deleteUser(String id) {
-        elasticDataRepository.deleteUser(id);
+        userElasticDataInMemoryRepository.deleteUser(id);
     }
 
     @Override
     public void consumeQuota(String id) {
-        elasticDataRepository.consumeQuota(id);
+        userElasticDataInMemoryRepository.consumeQuota(id);
     }
 
     @Override
     public List<User> getUsersQuota() {
-        return elasticDataRepository.getUsersQuota();
+        return userElasticDataInMemoryRepository.getUsersQuota();
     }
 
     @Override
     public void deleteDataFromDb() {
-        elasticDataRepository.deleteDataFromDb();
+        userElasticDataInMemoryRepository.deleteDataFromDb();
     }
 
     @Override
     public void seedDataToDb(List<User> users) {
-        users.forEach(user -> elasticDataRepository.createUser(user));
+        users.forEach(user -> userElasticDataInMemoryRepository.createUser(user));
     }
 
     @Override
     public List<User> getAllUsers() {
-        return elasticDataRepository.getAllUsers();
+        return userElasticDataInMemoryRepository.getAllUsers();
     }
 
     @Override
     public void saveUsers(List<User> users) {
-        elasticDataRepository.saveUsers(users);
+        userElasticDataInMemoryRepository.saveUsers(users);
     }
 
     @Override
     public void removeAllSoftDeletedUsers() {
-        elasticDataRepository.removeAllSoftDeletedUsers();
+        userElasticDataInMemoryRepository.removeAllSoftDeletedUsers();
     }
 }
