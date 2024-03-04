@@ -34,13 +34,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: isLocked
+                  name: locked
                   type: BOOLEAN
                   defaultValueComputed: false
                   constraints:
                     nullable: false
               - column:
-                  name: isDeleted
+                  name: deleted
                   type: BOOLEAN
                   defaultValueComputed: false
                   constraints:

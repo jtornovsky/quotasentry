@@ -10,14 +10,11 @@ import java.util.List;
 @Repository
 public class UserInitialDataRepository extends RdbDataRepository {
 
-    private final ConnectionProvider connectionProvider;
-
     public UserInitialDataRepository(ConnectionProvider connectionProvider) {
-        super("user_initial_data");
-        this.connectionProvider = connectionProvider;
+        super("user_initial_data", connectionProvider);
     }
 
     public List<User> getUserInitialData() {
-        return getAllUsers(connectionProvider);
+        return getAllUsers();
     }
 }

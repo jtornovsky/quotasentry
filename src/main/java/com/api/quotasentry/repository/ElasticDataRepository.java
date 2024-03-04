@@ -59,7 +59,8 @@ public class ElasticDataRepository implements DataRepository {
                 log.info("User with id {} not updated as it is marked as deleted", id);
             }
         } else {
-            log.info("User with id {} not found, so not updated", id);
+            log.info("User with id {} not found, creating it.", id);
+            createUser(updatedUser);
         }
     }
 

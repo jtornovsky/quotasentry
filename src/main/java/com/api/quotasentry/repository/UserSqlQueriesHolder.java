@@ -16,15 +16,15 @@ class UserSqlQueriesHolder {
     private final String selectUserSql;
 
     UserSqlQueriesHolder(String userTableName) {
-        this.insertUserSql = "insert into " + userTableName + " (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        this.insertUserSql = "insert into " + userTableName + " (id, firstName, lastName, lastLoginTimeUtc, requests, locked, deleted, created, modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         this.deleteUserSql = "delete from " + userTableName + " where id = ?";
         this.deleteAllUsersSql = "delete from " + userTableName;
-        this.deleteUserSoftlySql = "update " + userTableName + " set isDeleted = 1, modified = NOW() where id = ?";
-        this.removeAllSoftDeletedUsersSql = "delete from " + userTableName + " where isDeleted = 1";
+        this.deleteUserSoftlySql = "update " + userTableName + " set deleted = 1, modified = NOW() where id = ?";
+        this.removeAllSoftDeletedUsersSql = "delete from " + userTableName + " where deleted = 1";
         this.updateUserQuotaSql = "update " + userTableName + " set requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() where id = ?";
-        this.selectAllUsersWithoutDeletedSql = "select * from " + userTableName + " where isDeleted = 0";
+        this.selectAllUsersWithoutDeletedSql = "select * from " + userTableName + " where deleted = 0";
         this.selectAllUsersSql = "select * from " + userTableName;
-        this.selectUserSql = "select * from " + userTableName + " where id = ? and isDeleted = 0";
-        this.updateUserSql = "update " + userTableName + " set firstName = ?, lastName = ?, lastLoginTimeUtc = ?, requests = ?, isLocked = ?, isDeleted = ?, modified = NOW() WHERE id = ?";
+        this.selectUserSql = "select * from " + userTableName + " where id = ? and deleted = 0";
+        this.updateUserSql = "update " + userTableName + " set firstName = ?, lastName = ?, lastLoginTimeUtc = ?, requests = ?, locked = ?, deleted = ?, modified = NOW() WHERE id = ?";
     }
 }

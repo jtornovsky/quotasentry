@@ -71,8 +71,8 @@ public class UserController {
          "firstName": "AAAA",
          "lastName": "BBBB",
          "requests": 0,
-         "isLocked": false,
-         "isDeleted": false,
+         "locked": false,
+         "deleted": false,
          "created": "2024-03-01T00:00:00Z",
          "modified": "2024-03-01T00:00:00Z"
          }
@@ -102,8 +102,8 @@ public class UserController {
      "lastName": "BBBBVVVVV",
      "lastLoginTimeUtc": "2024-03-01T00:00:00Z",
      "requests": 3,
-     "isLocked": true,
-     "isDeleted": true,
+     "locked": true,
+     "deleted": true,
      "created": "2024-03-01T00:00:00Z",
      "modified": "2025-03-01T00:00:00Z"
      }

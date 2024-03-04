@@ -2,6 +2,7 @@ package com.api.quotasentry.repository;
 
 import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,14 +13,16 @@ import java.util.Optional;
 abstract class RdbDataRepository {
 
     protected final String tableName;
+    private final ConnectionProvider connectionProvider;
     protected final UserSqlQueriesHolder userSqlQueriesHolder;
 
-    protected RdbDataRepository(String tableName) {
+    protected RdbDataRepository(String tableName, ConnectionProvider connectionProvider) {
         this.tableName = tableName;
         userSqlQueriesHolder = new UserSqlQueriesHolder(tableName);
+        this.connectionProvider = connectionProvider;
     }
 
-    protected User getUser(String id, ConnectionProvider connectionProvider) {
+    protected User getSingleUser(String id) {
         try (Connection connection = connectionProvider.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getSelectUserSql())) {
                 statement.setString(1, id);
@@ -36,7 +39,7 @@ abstract class RdbDataRepository {
         return null;
     }
 
-    protected List<User> getAllUsers(ConnectionProvider connectionProvider) {
+    protected List<User> getAllUsers() {
         List<User> userInitialDataList = new ArrayList<>();
         try (Connection connection = connectionProvider.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getSelectAllUsersSql())) {
@@ -54,27 +57,108 @@ abstract class RdbDataRepository {
         return userInitialDataList;
     }
 
-    protected void saveUser(String id, User user, ConnectionProvider connectionProvider) {
-        User currentUser = getUser(id, connectionProvider);
+    protected void saveSingleUser(String id, User user) {
+        User currentUser = getSingleUser(id);
+        if (currentUser == null) {
+            // a new user
+            insertSingleUser(user);
+            return;
+        }
         if (user.getModified().isBefore(currentUser.getModified())) {
             log.info("User {} not updated as a data to update is older than user has", id);
             return;
         }
+        updateSingleUser(id, user);
+    }
+
+    private void insertSingleUser(User user) {
         try (Connection connection = connectionProvider.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getUpdateUserSql())) {
-                statement.setString(1, user.getFirstName());
-                statement.setString(2, user.getLastName());
-                statement.setObject(3, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
-                statement.setInt(4, user.getRequests());
-                statement.setBoolean(5, user.isLocked());
-                statement.setBoolean(6, user.isDeleted());
-                statement.setString(7, id);
-                statement.executeUpdate();
+            try (PreparedStatement preparedStatement = connection.prepareStatement(userSqlQueriesHolder.getInsertUserSql())) {
+                mapUserToPreparedStatement(preparedStatement, user);
+                preparedStatement.executeUpdate();
             }
-            log.info("User {} saved: {}", id, user);
+            log.info("User {} created", user);
         } catch (SQLException e) {
-            handleSqlException(e, "Failed to save user " + id + ", " + user);
+            handleSqlException(e, "Failed to create user " + user);
         }
+    }
+
+    private void updateSingleUser(String id, User user) {
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getUpdateUserSql())) {
+            mapUserForUpdate(user, statement);
+            statement.executeUpdate();
+            log.info("User {} updated: {}", id, user);
+        } catch (SQLException e) {
+            handleSqlException(e, "Failed to update user " + id + ", " + user);
+        }
+    }
+
+    protected void updateMultipleUsers(List<User> users) {
+        if (CollectionUtils.isEmpty(users)) {
+            log.warn("Empty users list, nothing to save");
+            return;
+        }
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getUpdateUserSql())) {
+            for (User user : users) {
+                mapUserForUpdate(user, statement);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            log.info("Updated {} users", users.size());
+        } catch (SQLException e) {
+            handleSqlException(e, "Failed to update users data");
+        }
+    }
+
+    protected void insertMultipleUsers(List<User> users) {
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(userSqlQueriesHolder.getInsertUserSql())) {
+            for (User user : users) {
+                mapUserToPreparedStatement(preparedStatement, user);
+                preparedStatement.addBatch();
+            }
+            preparedStatement.executeBatch();
+            log.info("Seeded {} users", users.size());
+        } catch (SQLException e) {
+            handleSqlException(e, "Failed to seed users data");
+        }
+    }
+
+    protected void executeSql(String sqlQuery, String successMessage, String failureMessage) {
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
+            statement.executeUpdate();
+            log.info(successMessage);
+        } catch (SQLException e) {
+            handleSqlException(e, failureMessage);
+        }
+    }
+
+    protected void executeUpdateSql(String id, String sqlQuery, String logMessage, String errorMessage) {
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
+            statement.setString(1, id);
+            statement.executeUpdate();
+            log.info(logMessage, id);
+        } catch (SQLException e) {
+            handleSqlException(e, errorMessage + id);
+        }
+    }
+
+    protected List<User> getAllUsersWithoutDeleted() {
+        List<User> users = new ArrayList<>();
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getSelectAllUsersWithoutDeletedSql());
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                users.add(mapUserFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            handleSqlException(e, "Failed to get users quota.");
+        }
+        return users;
     }
 
     protected User mapUserFromResultSet(ResultSet resultSet) throws SQLException {
@@ -84,13 +168,12 @@ abstract class RdbDataRepository {
         user.setLastName(resultSet.getString("lastName"));
         user.setLastLoginTimeUtc(Optional.ofNullable(resultSet.getTimestamp("lastLoginTimeUtc")).map(Timestamp::toLocalDateTime).orElse(null));
         user.setRequests(resultSet.getInt("requests"));
-        user.setLocked(resultSet.getBoolean("isLocked"));
-        user.setDeleted(resultSet.getBoolean("isDeleted"));
+        user.setLocked(resultSet.getBoolean("locked"));
+        user.setDeleted(resultSet.getBoolean("deleted"));
         user.setCreated(resultSet.getTimestamp("created").toLocalDateTime());
         user.setModified(resultSet.getTimestamp("modified").toLocalDateTime());
         return user;
     }
-
 
     protected void mapUserToPreparedStatement(PreparedStatement preparedStatement, User user) throws SQLException {
         preparedStatement.setString(1, user.getId());
@@ -102,6 +185,16 @@ abstract class RdbDataRepository {
         preparedStatement.setBoolean(7, user.isDeleted());
         preparedStatement.setObject(8, user.getCreated());
         preparedStatement.setObject(9, user.getModified());
+    }
+
+    private void mapUserForUpdate(User user, PreparedStatement statement) throws SQLException {
+        statement.setString(1, user.getFirstName());
+        statement.setString(2, user.getLastName());
+        statement.setObject(3, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
+        statement.setInt(4, user.getRequests());
+        statement.setBoolean(5, user.isLocked());
+        statement.setBoolean(6, user.isDeleted());
+        statement.setString(7, user.getId());
     }
 
     protected void handleSqlException(SQLException e, String message) {

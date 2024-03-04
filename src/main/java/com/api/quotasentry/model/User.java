@@ -36,11 +36,11 @@ public class User {
     @Column(name = "requests", nullable = false)
     protected int requests; // added field: the executed number of requests of the user
 
-    @Column(name = "isLocked", nullable = false)
-    protected boolean isLocked; // added field: whether user is locked or not
+    @Column(name = "locked", nullable = false)
+    protected boolean locked; // added field: whether user is locked or not
 
-    @Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false") // added field: whether user is deleted or not
-    private boolean isDeleted;
+    @Column(name = "deleted", nullable = false, columnDefinition = "boolean default false") // added field: whether user is deleted or not
+    private boolean deleted;
 
     @Column(name = "created", nullable = false, updatable = false)
     @CreatedDate

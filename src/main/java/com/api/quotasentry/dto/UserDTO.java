@@ -17,5 +17,5 @@ public class UserDTO {
     private String lastName;
     private LocalDateTime lastLoginTimeUtc;
     private int requests;
-    private boolean isLocked;
+    private boolean locked;
 }

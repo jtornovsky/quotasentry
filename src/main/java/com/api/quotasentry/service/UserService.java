@@ -13,7 +13,7 @@ public class UserService {
                 .lastName(user.getLastName())
                 .lastLoginTimeUtc(user.getLastLoginTimeUtc())
                 .requests(user.getRequests())
-                .isLocked(user.isLocked())
+                .locked(user.isLocked())
                 .build();
     }
 }
