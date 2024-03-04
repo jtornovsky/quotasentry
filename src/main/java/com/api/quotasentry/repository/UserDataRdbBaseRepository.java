@@ -122,7 +122,7 @@ abstract class UserDataRdbBaseRepository {
 
     protected void updateMultipleUsers(List<User> users) {
         if (CollectionUtils.isEmpty(users)) {
-            log.warn("Empty users list, nothing to save");
+            log.warn("Empty users list, nothing to update");
             return;
         }
         try (Connection connection = connectionProvider.getConnection();
@@ -139,6 +139,10 @@ abstract class UserDataRdbBaseRepository {
     }
 
     protected void insertMultipleUsers(List<User> users) {
+        if (CollectionUtils.isEmpty(users)) {
+            log.warn("Empty users list, nothing to insert");
+            return;
+        }
         try (Connection connection = connectionProvider.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(userSqlQueriesHolder.getInsertUserSql())) {
             for (User user : users) {
