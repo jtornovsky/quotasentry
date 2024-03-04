@@ -16,15 +16,15 @@ class UserSqlQueriesHolder {
     private final String selectUserSql;
 
     UserSqlQueriesHolder(String userTableName) {
-        this.insertUserSql = "INSERT INTO " + userTableName + " (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        this.deleteUserSql = "DELETE FROM " + userTableName + " WHERE id = ?";
-        this.deleteAllUsersSql = "DELETE FROM " + userTableName;
-        this.deleteUserSoftlySql = "UPDATE " + userTableName + " SET isDeleted = 1, modified = NOW() WHERE id = ?";
-        this.removeAllSoftDeletedUsersSql = "DELETE FROM " + userTableName + " WHERE isDeleted = 'true'";
-        this.updateUserQuotaSql = "UPDATE " + userTableName + " SET requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() WHERE id = ?";
-        this.selectAllUsersWithoutDeletedSql = "SELECT * FROM " + userTableName + " WHERE isDeleted = 'false'";
-        this.selectAllUsersSql = "SELECT * FROM " + userTableName;
-        this.selectUserSql = "SELECT * FROM " + userTableName + " WHERE id = ? and isDeleted = 'false'";
-        this.updateUserSql = "UPDATE " + userTableName + " SET firstName = ?, lastName = ?, lastLoginTimeUtc = ?, requests = ?, isLocked = ?, isDeleted = ?, modified = NOW() WHERE id = ?";
+        this.insertUserSql = "insert into " + userTableName + " (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        this.deleteUserSql = "delete from " + userTableName + " where id = ?";
+        this.deleteAllUsersSql = "delete from " + userTableName;
+        this.deleteUserSoftlySql = "update " + userTableName + " set isDeleted = 1, modified = NOW() where id = ?";
+        this.removeAllSoftDeletedUsersSql = "delete from " + userTableName + " where isDeleted = 1";
+        this.updateUserQuotaSql = "update " + userTableName + " set requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() where id = ?";
+        this.selectAllUsersWithoutDeletedSql = "select * from " + userTableName + " where isDeleted = 0";
+        this.selectAllUsersSql = "select * from " + userTableName;
+        this.selectUserSql = "select * from " + userTableName + " where id = ? and isDeleted = 0";
+        this.updateUserSql = "update " + userTableName + " set firstName = ?, lastName = ?, lastLoginTimeUtc = ?, requests = ?, isLocked = ?, isDeleted = ?, modified = NOW() WHERE id = ?";
     }
 }

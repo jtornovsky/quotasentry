@@ -96,18 +96,19 @@ public class ElasticDataRepository implements DataRepository {
 
     @Override
     public List<User> getUsersQuota() {
-        return getUsersWithoutDeleted();
+        return getUsersWithoutSoftDeletedOnes();
     }
 
     public List<User> getUsers() {
-        return getUsersWithoutDeleted();
+        return getUsersWithoutSoftDeletedOnes();
     }
 
     public void removeAllSoftDeletedUsers() {
         usersMap.entrySet().removeIf(entry -> entry.getValue().isDeleted());
+        log.info("All soft deleted users removed");
     }
 
-    private List<User> getUsersWithoutDeleted() {
+    private List<User> getUsersWithoutSoftDeletedOnes() {
         return usersMap.values().stream()
                 .filter(user -> !user.isDeleted())
                 .collect(Collectors.toList());
