@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a Data Transfer Object (DTO) for a user in the application.
+ */
 @Data
 @Builder
 @AllArgsConstructor

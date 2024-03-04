@@ -66,16 +66,16 @@ public class UserController {
      *
      * "http://localhost:8080/user/create"
      * body:
-         {
-         "id": "179c3abc-0000-1111-aca6-7550195481ad",
-         "firstName": "AAAA",
-         "lastName": "BBBB",
-         "requests": 0,
-         "locked": false,
-         "deleted": false,
-         "created": "2024-03-01T00:00:00Z",
-         "modified": "2024-03-01T00:00:00Z"
-         }
+             {
+             "id": "179c3abc-0000-1111-aca6-7550195481ad",
+             "firstName": "AAAA",
+             "lastName": "BBBB",
+             "requests": 0,
+             "locked": false,
+             "deleted": false,
+             "created": "2024-03-01T00:00:00Z",
+             "modified": "2024-03-01T00:00:00Z"
+             }
      *
      * @return
      */
@@ -96,17 +96,17 @@ public class UserController {
      *
      * "http://localhost:8080/user/update/179c3abc-0000-1111-aca6-7550195481ad"
      * body:
-     {
-     "id": "179c3abc-0000-1111-aca6-7550195481ad",
-     "firstName": "AAAAGGGG",
-     "lastName": "BBBBVVVVV",
-     "lastLoginTimeUtc": "2024-03-01T00:00:00Z",
-     "requests": 3,
-     "locked": true,
-     "deleted": true,
-     "created": "2024-03-01T00:00:00Z",
-     "modified": "2025-03-01T00:00:00Z"
-     }
+             {
+             "id": "179c3abc-0000-1111-aca6-7550195481ad",
+             "firstName": "AAAAGGGG",
+             "lastName": "BBBBVVVVV",
+             "lastLoginTimeUtc": "2024-03-01T00:00:00Z",
+             "requests": 3,
+             "locked": true,
+             "deleted": true,
+             "created": "2024-03-01T00:00:00Z",
+             "modified": "2025-03-01T00:00:00Z"
+             }
      *
      * @return
      */

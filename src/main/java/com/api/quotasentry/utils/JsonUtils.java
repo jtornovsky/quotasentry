@@ -9,6 +9,9 @@ import com.google.gson.GsonBuilder;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 
+/**
+ * Utility class for working with JSON data and Gson library.
+ */
 public class JsonUtils {
 
     private static GsonBuilder gsonBuilder = new GsonBuilder()
@@ -38,10 +41,24 @@ public class JsonUtils {
         return gson;
     }
 
+    /**
+     * Converts a JSON string to a Java object of a specified type.
+     *
+     * @param json The JSON string.
+     * @param type The target type.
+     * @param <T>  The generic type.
+     * @return The Java object of the specified type.
+     */
     public static <T>T fromJson(String json, Type type) {
         return getGson().fromJson(json, type);
     }
 
+    /**
+     * Converts a Java object to its JSON representation.
+     *
+     * @param src The Java object.
+     * @return The JSON string.
+     */
     public static String toJson(Object src) {
         return getGson().toJson(src);
     }

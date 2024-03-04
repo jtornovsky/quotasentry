@@ -9,7 +9,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Service syncs the Data bases: updates the currently not active db with the data of the active one.
+ * Service class for synchronizing data between active and non-active databases.
+ * The service runs on a scheduled basis and performs the following steps:
+ * <ul>
+ *     <li>Retrieve all users from the active database.</li>
+ *     <li>Write the retrieved users to the non-active database.</li>
+ *     <li>Remove soft-deleted entries from both databases.</li>
+ * </ul>
+ * <p>
+ * The service logs the progress of each step and any errors encountered.
+ * <p>
+ * This service is scheduled to run every 10 minutes with an initial delay of 10 minutes.
+ * <p>
+ * Note: This class assumes that the {@link DataServiceFactory} provides the correct {@link SyncDataService}
+ * implementations for the active and non-active databases.
  */
 @Slf4j
 @Service
@@ -21,6 +34,10 @@ public class SyncDbService {
         this.dataServiceFactory = dataServiceFactory;
     }
 
+    /**
+     * Synchronize databases method. Retrieves all users from the active database, writes them to the non-active
+     * database, and removes soft-deleted entries from both databases.
+     */
     @Scheduled(initialDelay = 600000, fixedRate = 600000) // runs every 10 minutes
     public void synchronizeDatabases() {
         log.info("Sync job started.");

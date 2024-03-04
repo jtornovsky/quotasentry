@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+/**
+ * Represents a user in the application.
+ */
 @Entity
 @Table(name = "user")
 @Data
@@ -25,29 +28,29 @@ public class User {
     private String id;
 
     @Column(name = "firstName", nullable = false)
-    protected String firstName;
+    private String firstName;
 
     @Column(name = "lastName", nullable = false)
-    protected String lastName;
+    private String lastName;
 
     @Column(name = "lastLoginTimeUtc")
-    protected LocalDateTime lastLoginTimeUtc;
+    private LocalDateTime lastLoginTimeUtc;
 
     @Column(name = "requests", nullable = false)
-    protected int requests; // added field: the executed number of requests of the user
+    private int requests; // added field: the executed number of requests of the user
 
     @Column(name = "locked", nullable = false)
-    protected boolean locked; // added field: whether user is locked or not
+    private boolean locked; // added field: whether user is locked or not
 
-    @Column(name = "deleted", nullable = false, columnDefinition = "boolean default false") // added field: whether user is deleted or not
-    private boolean deleted;
+    @Column(name = "deleted", nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted;    // added field: whether user is deleted or not
 
     @Column(name = "created", nullable = false, updatable = false)
     @CreatedDate
-    protected LocalDateTime created = LocalDateTime.now(ZoneOffset.UTC);
+    private LocalDateTime created = LocalDateTime.now(ZoneOffset.UTC);
 
     @Column(name = "modified", nullable = false)
     @LastModifiedDate
-    protected LocalDateTime modified = LocalDateTime.now(ZoneOffset.UTC);
+    private LocalDateTime modified = LocalDateTime.now(ZoneOffset.UTC);
 }
 

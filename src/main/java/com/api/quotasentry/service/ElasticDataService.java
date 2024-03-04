@@ -8,7 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Elastic's implementation of the DB
+ * Service class providing data manipulation functionalities specific to the simulated Elastic database.
+ * This class implements the DataService, AdminDataService, and SyncDataService interfaces.
+ * It delegates the actual database operations to the UserElasticDataInMemoryRepository.
+ * <p>
+ * Methods in this class provide CRUD operations for users, along with specialized operations for handling quotas,
+ * soft deletes, and synchronization between active and non-active databases.
  */
 @Service
 class ElasticDataService implements DataService, AdminDataService, SyncDataService {

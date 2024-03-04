@@ -100,7 +100,7 @@ abstract class UserDataRdbBaseRepository {
     private void insertSingleUser(User user) {
         try (Connection connection = connectionProvider.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(userSqlQueriesHolder.getInsertUserSql())) {
-                mapUserToPreparedStatement(preparedStatement, user);
+                mapUserForInsertStatement(preparedStatement, user);
                 preparedStatement.executeUpdate();
             }
             log.info("User {} created", user);
@@ -112,7 +112,7 @@ abstract class UserDataRdbBaseRepository {
     private void updateSingleUser(String id, User user) {
         try (Connection connection = connectionProvider.getConnection();
              PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getUpdateUserSql())) {
-            mapUserForUpdate(user, statement);
+            mapUserForUpdateStatement(user, statement);
             statement.executeUpdate();
             log.info("User {} updated: {}", id, user);
         } catch (SQLException e) {
@@ -128,7 +128,7 @@ abstract class UserDataRdbBaseRepository {
         try (Connection connection = connectionProvider.getConnection();
              PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getUpdateUserSql())) {
             for (User user : users) {
-                mapUserForUpdate(user, statement);
+                mapUserForUpdateStatement(user, statement);
                 statement.addBatch();
             }
             statement.executeBatch();
@@ -146,7 +146,7 @@ abstract class UserDataRdbBaseRepository {
         try (Connection connection = connectionProvider.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(userSqlQueriesHolder.getInsertUserSql())) {
             for (User user : users) {
-                mapUserToPreparedStatement(preparedStatement, user);
+                mapUserForInsertStatement(preparedStatement, user);
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -205,7 +205,7 @@ abstract class UserDataRdbBaseRepository {
         return user;
     }
 
-    protected void mapUserToPreparedStatement(PreparedStatement preparedStatement, User user) throws SQLException {
+    protected void mapUserForInsertStatement(PreparedStatement preparedStatement, User user) throws SQLException {
         preparedStatement.setString(1, user.getId());
         preparedStatement.setString(2, user.getFirstName());
         preparedStatement.setString(3, user.getLastName());
@@ -217,14 +217,14 @@ abstract class UserDataRdbBaseRepository {
         preparedStatement.setObject(9, user.getModified());
     }
 
-    private void mapUserForUpdate(User user, PreparedStatement statement) throws SQLException {
-        statement.setString(1, user.getFirstName());
-        statement.setString(2, user.getLastName());
-        statement.setObject(3, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
-        statement.setInt(4, user.getRequests());
-        statement.setBoolean(5, user.isLocked());
-        statement.setBoolean(6, user.isDeleted());
-        statement.setString(7, user.getId());
+    private void mapUserForUpdateStatement(User user, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setString(1, user.getFirstName());
+        preparedStatement.setString(2, user.getLastName());
+        preparedStatement.setObject(3, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
+        preparedStatement.setInt(4, user.getRequests());
+        preparedStatement.setBoolean(5, user.isLocked());
+        preparedStatement.setBoolean(6, user.isDeleted());
+        preparedStatement.setString(7, user.getId());
     }
 
     protected void handleSqlException(SQLException e, String message) {

@@ -8,12 +8,19 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Repository class for interacting with MySQL data for the 'User' entity.
+ */
 @Slf4j
 @Repository
 public class UserMySqlDataRdbRepository extends UserDataRdbBaseRepository implements DataRepository {
 
+    /**
+     * Constructor that injects the connection provider.
+     *
+     * @param connectionProvider the connection provider for the MySQL database.
+     */
     @Autowired
     public UserMySqlDataRdbRepository(ConnectionProvider connectionProvider) {
         super("user", connectionProvider);
@@ -29,6 +36,11 @@ public class UserMySqlDataRdbRepository extends UserDataRdbBaseRepository implem
         return super.getSingleUser(id);
     }
 
+    /**
+     * Saves a list of users to the database. If a user already exists in the database, it is updated.
+     *
+     * @param users the list of users to save.
+     */
     public void saveUsers(List<User> users) {
         List<User> currentlyResideUsers = super.getAllUsersWithoutDeleted();
         if (CollectionUtils.isEmpty(currentlyResideUsers)) {
@@ -56,7 +68,6 @@ public class UserMySqlDataRdbRepository extends UserDataRdbBaseRepository implem
             super.updateMultipleUsers(oldUsers);
         }
     }
-
 
     @Override
     public void updateUser(String id, User updatedUser) {
@@ -88,6 +99,9 @@ public class UserMySqlDataRdbRepository extends UserDataRdbBaseRepository implem
         return super.getAllUsersWithoutDeleted();
     }
 
+    /**
+     * Removes all softly deleted users from the database.
+     */
     public void removeAllSoftDeletedUsers() {
         executeSql(
                 userSqlQueriesHolder.getRemoveAllSoftDeletedUsersSql(),
@@ -96,6 +110,9 @@ public class UserMySqlDataRdbRepository extends UserDataRdbBaseRepository implem
         );
     }
 
+    /**
+     * Deletes all users from the database.
+     */
     public void deleteDataFromDb() {
         executeSql(
                 userSqlQueriesHolder.getDeleteAllUsersSql(),
@@ -104,10 +121,20 @@ public class UserMySqlDataRdbRepository extends UserDataRdbBaseRepository implem
         );
     }
 
+    /**
+     * Seeds the database with a list of users.
+     *
+     * @param users the list of users to seed the database with.
+     */
     public void seedDataToDb(List<User> users) {
         super.insertMultipleUsers(users);
     }
 
+    /**
+     * Retrieves all users from the database.
+     *
+     * @return the list of all users.
+     */
     public List<User> getAllUsers() {
         return super.getAllUsers();
     }
