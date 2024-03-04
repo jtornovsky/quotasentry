@@ -3,7 +3,6 @@ package com.api.quotasentry.repository;
 import com.api.quotasentry.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -15,18 +14,11 @@ import java.util.List;
 @Repository
 public class MySqlDataRepository extends RdbDataRepository implements DataRepository {
 
-    private final static String USER_TABLE = "user";
-    private final static String INSERT_USER_SQL = "INSERT INTO " + USER_TABLE + " (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private final static String DELETE_USER_SQL = "DELETE FROM " + USER_TABLE + " WHERE id = ?";
-    private final static String DELETE_ALL_USERS = "DELETE FROM " + USER_TABLE;
-    private final static String UPDATE_USER_SQL = "UPDATE " + USER_TABLE + " SET requests = requests + 1, lastLoginTimeUtc = NOW(), modified = NOW() WHERE id = ?";
-    private final static String SELECT_ALL_USERS_SQL = "SELECT * FROM " + USER_TABLE;
-
     private final ConnectionProvider connectionProvider;
 
     @Autowired
     public MySqlDataRepository(ConnectionProvider connectionProvider) {
-        super(USER_TABLE);
+        super("user");
         this.connectionProvider = connectionProvider;
     }
 
@@ -38,7 +30,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
             return;
         }
         try (Connection connection = connectionProvider.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(userSqlQueriesHolder.getInsertUserSql())) {
                 mapUserToPreparedStatement(preparedStatement, user);
                 preparedStatement.executeUpdate();
             }
@@ -76,7 +68,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
             return;
         }
         try (Connection connection = connectionProvider.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_USER_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getDeleteUserSoftlySql())) {
             statement.setString(1, id);
             statement.executeUpdate();
             log.info("User {} deleted", id);
@@ -93,7 +85,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
             return;
         }
         try (Connection connection = connectionProvider.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getUpdateUserQuotaSql())) {
             statement.setString(1, id);
             statement.executeUpdate();
             log.info("Quota consumed for the user {}", id);
@@ -106,7 +98,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
     public List<User> getUsersQuota() {
         List<User> users = new ArrayList<>();
         try (Connection connection = connectionProvider.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_USERS_SQL);
+             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getSelectAllUsersWithoutDeletedSql());
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 users.add(mapUserFromResultSet(resultSet));
@@ -119,7 +111,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
 
     public void deleteDataFromDb() {
         try (Connection connection = connectionProvider.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_ALL_USERS)) {
+             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getDeleteAllUsersSql())) {
             statement.executeUpdate();
             log.info("All users deleted");
         } catch (SQLException e) {
@@ -129,7 +121,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
 
     public void seedDataToDb(List<User> users) {
         try (Connection connection = connectionProvider.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(userSqlQueriesHolder.getInsertUserSql())) {
             for (User user : users) {
                 mapUserToPreparedStatement(preparedStatement, user);
                 preparedStatement.addBatch();
@@ -141,7 +133,7 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
         }
     }
 
-    public List<User> getUsers() {
-        return super.getUsers(connectionProvider);
+    public List<User> getAllUsers() {
+        return super.getAllUsers(connectionProvider);
     }
 }

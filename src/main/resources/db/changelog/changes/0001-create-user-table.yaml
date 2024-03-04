@@ -40,6 +40,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: isDeleted
+                  type: BOOLEAN
+                  defaultValueComputed: false
+                  constraints:
+                    nullable: false
+              - column:
                   name: created
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP

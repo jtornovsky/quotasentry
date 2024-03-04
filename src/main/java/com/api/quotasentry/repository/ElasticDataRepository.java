@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -23,17 +23,22 @@ public class ElasticDataRepository implements DataRepository {
     @Override
     public void createUser(User user) {
         if (usersMap.containsKey(user.getId())) {
-            log.info("User {} already exists, nothing to create", user.getId());
+            log.info("User with id {} already exists, nothing to create", user.getId());
             return;
         }
         usersMap.put(user.getId(), user);
-        log.info("User {} created", user);
+        log.info("User with id {} created", user.getId());
     }
 
     @Override
     public User getUser(String id) {
         if (usersMap.containsKey(id)) {
-            return usersMap.get(id);
+            User user = usersMap.get(id);
+            if (!user.isDeleted()) {
+                return user;
+            } else {
+                log.info("User with id {} found but is marked as deleted", id);
+            }
         }
         log.info("User with id {} not found", id);
         return null;
@@ -41,57 +46,78 @@ public class ElasticDataRepository implements DataRepository {
 
     @Override
     public void updateUser(String id, User updatedUser) {
-        if (!usersMap.containsKey(id)) {
-            log.info("User with id {} not found, so not updated", id);
-            return;
-        }
-        User currentUser = usersMap.get(id);
-        if (currentUser.getModified().isBefore(updatedUser.getModified())) {
-            usersMap.put(id, updatedUser);
-            log.info("User {} updated", id);
+        if (usersMap.containsKey(id)) {
+            User currentUser = usersMap.get(id);
+            if (!currentUser.isDeleted()) {
+                if (currentUser.getModified().isBefore(updatedUser.getModified())) {
+                    usersMap.put(id, updatedUser);
+                    log.info("User with id {} updated", id);
+                } else {
+                    log.info("User with id {} not updated as the provided data is older than existing data", id);
+                }
+            } else {
+                log.info("User with id {} not updated as it is marked as deleted", id);
+            }
         } else {
-            log.info("User {} not updated as a data to update is older than user has", id);
+            log.info("User with id {} not found, so not updated", id);
         }
     }
 
     @Override
     public void deleteUser(String id) {
-        if (!usersMap.containsKey(id)) {
-            log.info("User with id {} not found, so not deleted", id);
-            return;
+        if (usersMap.containsKey(id)) {
+            User user = usersMap.get(id);
+            if (!user.isDeleted()) {
+                user.setDeleted(true);
+                log.info("User with id {} marked as deleted", id);
+            } else {
+                log.info("User with id {} already marked as deleted", id);
+            }
+        } else {
+            log.info("User with id {} not found, so not marked as deleted", id);
         }
-        usersMap.remove(id);
-        log.info("User {} deleted", id);
     }
 
     @Override
     public void consumeQuota(String id) {
-        if (!usersMap.containsKey(id)) {
-            log.info("User with id {} not found, so quota not consumed", id);
-            return;
+        User user = getUser(id);
+        if (user != null) {
+            if (user.isDeleted()) {
+                log.info("User with id {} is marked as deleted, quota not consumed", id);
+                return;
+            }
+            int currentRequests = user.getRequests();
+            user.setRequests(currentRequests + 1);
+            user.setLastLoginTimeUtc(LocalDateTime.now(ZoneOffset.UTC));
+            user.setModified(LocalDateTime.now(ZoneOffset.UTC));
+            log.info("Quota consumed for the user with id {}", id);
         }
-        User user = usersMap.get(id);
-        int currentRequests = user.getRequests();
-        user.setRequests(currentRequests + 1);
-        user.setLastLoginTimeUtc(LocalDateTime.now(ZoneOffset.UTC));
-        user.setModified(LocalDateTime.now(ZoneOffset.UTC));
-        log.info("Quota consumed for the user {}", id);
     }
 
     @Override
     public List<User> getUsersQuota() {
-        return new ArrayList<>(usersMap.values());
+        return getUsersWithoutDeleted();
+    }
+
+    public List<User> getUsers() {
+        return getUsersWithoutDeleted();
+    }
+
+    private List<User> getUsersWithoutDeleted() {
+        return usersMap.values().stream()
+                .filter(user -> !user.isDeleted())
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getAllUsers() {
+        return List.copyOf(usersMap.values());
     }
 
     public void deleteDataFromDb() {
         usersMap.clear();
     }
 
-    public List<User> getUsers() {
-        return new ArrayList<>(usersMap.values());
-    }
-
     public void saveUsers(List<User> users) {
-        users.stream().forEach(user -> updateUser(user.getId(), user));
+        users.forEach(user -> updateUser(user.getId(), user));
     }
 }

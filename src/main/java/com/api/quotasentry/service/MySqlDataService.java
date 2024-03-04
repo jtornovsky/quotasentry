@@ -61,8 +61,8 @@ class MySqlDataService implements DataService, AdminDataService, SyncDataService
     }
 
     @Override
-    public List<User> getUsers() {
-        return mySqlDataRepository.getUsers();
+    public List<User> getAllUsers() {
+        return mySqlDataRepository.getAllUsers();
     }
 
     @Override

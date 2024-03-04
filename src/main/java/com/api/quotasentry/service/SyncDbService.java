@@ -28,7 +28,7 @@ public class SyncDbService {
         SyncDataService notActiveDataService = (SyncDataService)dataServiceFactory.getNotActiveDataService();
 
         // Read data from the active database
-        List<User> users = activeDataService.getUsers();
+        List<User> users = activeDataService.getAllUsers();
 
         // Write data to the non-active database
         notActiveDataService.saveUsers(users);

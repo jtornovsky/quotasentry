@@ -18,7 +18,6 @@ public class UserInitialDataRepository extends RdbDataRepository {
     }
 
     public List<User> getUserInitialData() {
-        return getUsers(connectionProvider);
+        return getAllUsers(connectionProvider);
     }
-
 }

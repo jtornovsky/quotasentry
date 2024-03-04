@@ -11,16 +11,17 @@ import java.util.Optional;
 @Slf4j
 abstract class RdbDataRepository {
 
-    protected final String TABLE_NAME;
+    protected final String tableName;
+    protected final UserSqlQueriesHolder userSqlQueriesHolder;
 
-    protected RdbDataRepository(String TABLE_NAME) {
-        this.TABLE_NAME = TABLE_NAME;
+    protected RdbDataRepository(String tableName) {
+        this.tableName = tableName;
+        userSqlQueriesHolder = new UserSqlQueriesHolder(tableName);
     }
 
     protected User getUser(String id, ConnectionProvider connectionProvider) {
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getSelectUserSql())) {
                 statement.setString(1, id);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
@@ -35,11 +36,10 @@ abstract class RdbDataRepository {
         return null;
     }
 
-    protected List<User> getUsers(ConnectionProvider connectionProvider) {
+    protected List<User> getAllUsers(ConnectionProvider connectionProvider) {
         List<User> userInitialDataList = new ArrayList<>();
         try (Connection connection = connectionProvider.getConnection()) {
-            String sql = "SELECT * FROM " + TABLE_NAME;
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getSelectAllUsersSql())) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         User userData = mapUserFromResultSet(resultSet);
@@ -48,9 +48,9 @@ abstract class RdbDataRepository {
                 }
             }
         } catch (SQLException e) {
-            handleSqlException(e, "Failed to retrieve user data from table " + TABLE_NAME);
+            handleSqlException(e, "Failed to retrieve user data from table " + tableName);
         }
-        log.info("User data retrieved from table {}", TABLE_NAME);
+        log.info("User data retrieved from table {}", tableName);
         return userInitialDataList;
     }
 
@@ -61,13 +61,14 @@ abstract class RdbDataRepository {
             return;
         }
         try (Connection connection = connectionProvider.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("UPDATE " + TABLE_NAME + " SET firstName = ?, lastName = ?, lastLoginTimeUtc = ?, requests = ?, isLocked = ?, modified = NOW() WHERE id = ?")) {
+            try (PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getUpdateUserSql())) {
                 statement.setString(1, user.getFirstName());
                 statement.setString(2, user.getLastName());
                 statement.setObject(3, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
                 statement.setInt(4, user.getRequests());
                 statement.setBoolean(5, user.isLocked());
-                statement.setString(6, id);
+                statement.setBoolean(6, user.isDeleted());
+                statement.setString(7, id);
                 statement.executeUpdate();
             }
             log.info("User {} saved: {}", id, user);
@@ -84,6 +85,7 @@ abstract class RdbDataRepository {
         user.setLastLoginTimeUtc(Optional.ofNullable(resultSet.getTimestamp("lastLoginTimeUtc")).map(Timestamp::toLocalDateTime).orElse(null));
         user.setRequests(resultSet.getInt("requests"));
         user.setLocked(resultSet.getBoolean("isLocked"));
+        user.setDeleted(resultSet.getBoolean("isDeleted"));
         user.setCreated(resultSet.getTimestamp("created").toLocalDateTime());
         user.setModified(resultSet.getTimestamp("modified").toLocalDateTime());
         return user;
@@ -97,8 +99,9 @@ abstract class RdbDataRepository {
         preparedStatement.setObject(4, user.getLastLoginTimeUtc(), Types.TIMESTAMP);
         preparedStatement.setInt(5, user.getRequests());
         preparedStatement.setBoolean(6, user.isLocked());
-        preparedStatement.setObject(7, user.getCreated());
-        preparedStatement.setObject(8, user.getModified());
+        preparedStatement.setBoolean(7, user.isDeleted());
+        preparedStatement.setObject(8, user.getCreated());
+        preparedStatement.setObject(9, user.getModified());
     }
 
     protected void handleSqlException(SQLException e, String message) {

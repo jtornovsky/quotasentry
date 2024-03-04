@@ -1,94 +1,93 @@
 databaseChangeLog:
   - changeSet:
-      id: 0003-seed-data-to-user_initial_data-table
+      id: 0004-add-isdeleted-to-user_initial_data
       author: jtornovsky
       changes:
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('e32a9fe7-83bb-4f64-85f3-38b2b27de26b', 'John', 'Doe', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('e32a9fe7-83bb-4f64-85f3-38b2b27de26b', 'John', 'Doe', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('ac2d7f42-7b51-4c9b-b5ed-c2c981b3c304', 'Jane', 'Smith', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('ac2d7f42-7b51-4c9b-b5ed-c2c981b3c304', 'Jane', 'Smith', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('451289f9-4f42-4388-b515-053d7ab1c671', 'Michael', 'Johnson', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('451289f9-4f42-4388-b515-053d7ab1c671', 'Michael', 'Johnson', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('a3303304-6d5a-490f-91e9-5b9df21966b9', 'Jessica', 'Williams', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('a3303304-6d5a-490f-91e9-5b9df21966b9', 'Jessica', 'Williams', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('b38f3b69-0f2f-45b9-81dc-21f5cdd99c2b', 'William', 'Brown', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('b38f3b69-0f2f-45b9-81dc-21f5cdd99c2b', 'William', 'Brown', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('71e9b3b7-58c8-4a59-a7ef-92612d7f23c8', 'Jennifer', 'Jones', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('71e9b3b7-58c8-4a59-a7ef-92612d7f23c8', 'Jennifer', 'Jones', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('19d6d8f7-3da4-47fd-8538-c97c0df7fb0e', 'James', 'Garcia', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('19d6d8f7-3da4-47fd-8538-c97c0df7fb0e', 'James', 'Garcia', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('5d812013-5d79-4216-8eb3-e6c32b08d701', 'Mary', 'Davis', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('5d812013-5d79-4216-8eb3-e6c32b08d701', 'Mary', 'Davis', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('8d888af8-95b3-4141-b9ac-fd9b2804c13e', 'David', 'Rodriguez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('8d888af8-95b3-4141-b9ac-fd9b2804c13e', 'David', 'Rodriguez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('8b4b79d2-3a69-4e67-a0c8-141269a47f35', 'Patricia', 'Martinez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('8b4b79d2-3a69-4e67-a0c8-141269a47f35', 'Patricia', 'Martinez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('2e99d4c3-d1ad-4a9a-97fc-dc85ac8ff2a2', 'Richard', 'Hernandez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('2e99d4c3-d1ad-4a9a-97fc-dc85ac8ff2a2', 'Richard', 'Hernandez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('8c344cd5-c027-458d-97db-bbda76ac304d', 'Linda', 'Lopez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('8c344cd5-c027-458d-97db-bbda76ac304d', 'Linda', 'Lopez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('df648ce4-ecb3-4190-b4dc-c8b618ee46df', 'Christopher', 'Lee', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('df648ce4-ecb3-4190-b4dc-c8b618ee46df', 'Christopher', 'Lee', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('56d5a0a2-71b3-4d67-9e7f-4d8c4fc01e62', 'Barbara', 'Gonzalez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('56d5a0a2-71b3-4d67-9e7f-4d8c4fc01e62', 'Barbara', 'Gonzalez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('6254b4bf-bd44-4c7d-a151-f4a1265719a4', 'Daniel', 'Harris', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('6254b4bf-bd44-4c7d-a151-f4a1265719a4', 'Daniel', 'Harris', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('7b2334ec-4141-4dc7-a982-51f9a781847a', 'Elizabeth', 'Clark', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('7b2334ec-4141-4dc7-a982-51f9a781847a', 'Elizabeth', 'Clark', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('f014c82c-cb04-419b-8973-1844a9f44a92', 'Matthew', 'Lewis', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('f014c82c-cb04-419b-8973-1844a9f44a92', 'Matthew', 'Lewis', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('bf71e47c-c80a-464e-bb2e-e857a74446d4', 'Helen', 'Robinson', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('bf71e47c-c80a-464e-bb2e-e857a74446d4', 'Helen', 'Robinson', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('03624da4-2b4a-48f9-8524-38b74f9789fd', 'Anthony', 'Walker', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('03624da4-2b4a-48f9-8524-38b74f9789fd', 'Anthony', 'Walker', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('b084dd5e-5b34-40f3-9478-106307b6dc95', 'Margaret', 'Young', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('b084dd5e-5b34-40f3-9478-106307b6dc95', 'Margaret', 'Young', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('48cc87aa-d54d-4d17-b82c-70c85bf74b76', 'Aaron', 'Ward', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('48cc87aa-d54d-4d17-b82c-70c85bf74b76', 'Aaron', 'Ward', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('37c1a786-e5a9-4768-9799-8d3149a7895f', 'Deborah', 'Mitchell', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('37c1a786-e5a9-4768-9799-8d3149a7895f', 'Deborah', 'Mitchell', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('f45445af-4e5a-42f3-93af-83bfc88a79f3', 'Jerry', 'Stewart', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('f45445af-4e5a-42f3-93af-83bfc88a79f3', 'Jerry', 'Stewart', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('c79b7205-e54c-4a42-a5f9-06cb8d2aa2b4', 'Marilyn', 'Perez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('c79b7205-e54c-4a42-a5f9-06cb8d2aa2b4', 'Marilyn', 'Perez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('d46c1ba1-69df-4a7a-9b09-5c598d61e7c3', 'Randy', 'Anderson', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('d46c1ba1-69df-4a7a-9b09-5c598d61e7c3', 'Randy', 'Anderson', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('ba09864d-9d51-40e1-8a42-8f7ad316131f', 'Janet', 'Smith', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('ba09864d-9d51-40e1-8a42-8f7ad316131f', 'Janet', 'Smith', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('e2f57b9a-990d-4cb2-bdc1-b0e6d9242952', 'Harry', 'Allen', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('e2f57b9a-990d-4cb2-bdc1-b0e6d9242952', 'Harry', 'Allen', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('c78e2f0a-d558-4325-bf3e-9f1236c53976', 'Julie', 'Diaz', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('c78e2f0a-d558-4325-bf3e-9f1236c53976', 'Julie', 'Diaz', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('e03cfd8e-6c6f-4a67-993d-bc01a2b31776', 'Samuel', 'Walker', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('e03cfd8e-6c6f-4a67-993d-bc01a2b31776', 'Samuel', 'Walker', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('92d4c7c9-0d11-41d8-ba51-d6ad47b4b8e5', 'Nicole', 'Ward', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('92d4c7c9-0d11-41d8-ba51-d6ad47b4b8e5', 'Nicole', 'Ward', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('8305eab2-70ac-4a62-b0da-9d80d63e7315', 'Joseph', 'Johnson', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('8305eab2-70ac-4a62-b0da-9d80d63e7315', 'Joseph', 'Johnson', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('f2a413bb-7de2-41d5-b36c-bc9cc8c72b98', 'Evelyn', 'Rodriguez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('f2a413bb-7de2-41d5-b36c-bc9cc8c72b98', 'Evelyn', 'Rodriguez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('c3b0df66-376e-4983-a22d-47f0404f1af8', 'Eugene', 'Barnes', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('c3b0df66-376e-4983-a22d-47f0404f1af8', 'Eugene', 'Barnes', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('2489b05d-b314-4b52-93a4-bd10b5cd7b91', 'Amanda', 'Stewart', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('2489b05d-b314-4b52-93a4-bd10b5cd7b91', 'Amanda', 'Stewart', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('9d15930c-7777-4fa7-9330-476b0718a4df', 'Kathy', 'Mitchell', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('9d15930c-7777-4fa7-9330-476b0718a4df', 'Kathy', 'Mitchell', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('6db6c47f-c77b-4ba6-a06b-39f8e9b58a43', 'Juan', 'Martinez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('6db6c47f-c77b-4ba6-a06b-39f8e9b58a43', 'Juan', 'Martinez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('cb8c3e9d-69e2-4ed6-b24c-1767753f4ee1', 'Henry', 'Young', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('cb8c3e9d-69e2-4ed6-b24c-1767753f4ee1', 'Henry', 'Young', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('34b8e72b-b7c9-4c0f-9c18-3029ab049601', 'Gloria', 'Scott', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('34b8e72b-b7c9-4c0f-9c18-3029ab049601', 'Gloria', 'Scott', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('c0a4f641-bcfd-4bc9-805d-d64da15dc5b1', 'Douglas', 'Morris', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('c0a4f641-bcfd-4bc9-805d-d64da15dc5b1', 'Douglas', 'Morris', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('7e89a70b-6282-448b-8f82-9ab1efc7aeb0', 'Anne', 'Adams', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('7e89a70b-6282-448b-8f82-9ab1efc7aeb0', 'Anne', 'Adams', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('6be316bb-187e-4c70-a8f1-47a1a279b4e2', 'Thomas', 'Mitchell', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('6be316bb-187e-4c70-a8f1-47a1a279b4e2', 'Thomas', 'Mitchell', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('17e268fd-46c9-4664-ae2b-99bfbe1c47cb', 'Kathy', 'Perez', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('17e268fd-46c9-4664-ae2b-99bfbe1c47cb', 'Kathy', 'Perez', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('e7ecf3b1-b9e3-4d85-98cc-93ec8d61b525', 'Brenda', 'Diaz', NULL, 0, false, NOW(), NOW())
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('e7ecf3b1-b9e3-4d85-98cc-93ec8d61b525', 'Brenda', 'Diaz', NULL, 0, false, false, NOW(), NOW())
         - sql:
-            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, created, modified) VALUES ('0dd70c1c-2211-4590-b482-f5e6ae61fd3b', 'Randy', 'Taylor', NULL, 0, false, NOW(), NOW())
-
+            - INSERT INTO user_initial_data (id, firstName, lastName, lastLoginTimeUtc, requests, isLocked, isDeleted, created, modified) VALUES ('0dd70c1c-2211-4590-b482-f5e6ae61fd3b', 'Randy', 'Taylor', NULL, 0, false, false, NOW(), NOW())

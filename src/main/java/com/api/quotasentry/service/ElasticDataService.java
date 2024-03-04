@@ -63,8 +63,8 @@ class ElasticDataService implements DataService, AdminDataService, SyncDataServi
     }
 
     @Override
-    public List<User> getUsers() {
-        return elasticDataRepository.getUsers();
+    public List<User> getAllUsers() {
+        return elasticDataRepository.getAllUsers();
     }
 
     @Override

@@ -80,6 +80,7 @@ public class DbService {
         DataService dataService = dataServiceFactory.getActiveDataService();
         List<User> usersList = dataService.getUsersQuota();
         return usersList.stream()
+                .filter(user -> user.isDeleted()) // filters out deleted users
                 .map(userService::convertUserToUserDto)
                 .collect(Collectors.toList());
     }

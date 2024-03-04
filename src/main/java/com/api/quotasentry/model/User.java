@@ -39,6 +39,9 @@ public class User {
     @Column(name = "isLocked", nullable = false)
     protected boolean isLocked; // added field: whether user is locked or not
 
+    @Column(name = "isDeleted", nullable = false, columnDefinition = "boolean default false") // added field: whether user is deleted or not
+    private boolean isDeleted;
+
     @Column(name = "created", nullable = false, updatable = false)
     @CreatedDate
     protected LocalDateTime created = LocalDateTime.now(ZoneOffset.UTC);
