@@ -69,4 +69,9 @@ class MySqlDataService implements DataService, AdminDataService, SyncDataService
     public void saveUsers(List<User> users) {
         mySqlDataRepository.saveUsers(users);
     }
+
+    @Override
+    public void removeAllSoftDeletedUsers() {
+        mySqlDataRepository.removeAllSoftDeletedUsers();
+    }
 }

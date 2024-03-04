@@ -27,11 +27,24 @@ public class SyncDbService {
         SyncDataService activeDataService = (SyncDataService)dataServiceFactory.getActiveDataService();
         SyncDataService notActiveDataService = (SyncDataService)dataServiceFactory.getNotActiveDataService();
 
-        // Read data from the active database
-        List<User> users = activeDataService.getAllUsers();
+        try {
+            // Read data from the active database
+            List<User> users = activeDataService.getAllUsers();
+            log.info("Found {} users in the active database.", users.size());
 
-        // Write data to the non-active database
-        notActiveDataService.saveUsers(users);
+            // Write data to the non-active database
+            notActiveDataService.saveUsers(users);
+            log.info("Synced {} users to the non-active database.", users.size());
+
+            // Remove previously soft-removed entries
+            activeDataService.removeAllSoftDeletedUsers();
+            notActiveDataService.removeAllSoftDeletedUsers();
+            log.info("Soft-deleted entries removed from both databases.");
+
+        } catch (Exception e) {
+            log.error("Error occurred during database synchronization: {}", e.getMessage(), e);
+        }
+
         log.info("Sync job ended.");
     }
 }

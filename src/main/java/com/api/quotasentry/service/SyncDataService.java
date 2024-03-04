@@ -7,4 +7,5 @@ import java.util.List;
 public interface SyncDataService {
     List<User> getAllUsers();
     void saveUsers(List<User> users);
+    void removeAllSoftDeletedUsers();
 }

@@ -71,4 +71,9 @@ class ElasticDataService implements DataService, AdminDataService, SyncDataServi
     public void saveUsers(List<User> users) {
         elasticDataRepository.saveUsers(users);
     }
+
+    @Override
+    public void removeAllSoftDeletedUsers() {
+        elasticDataRepository.removeAllSoftDeletedUsers();
+    }
 }

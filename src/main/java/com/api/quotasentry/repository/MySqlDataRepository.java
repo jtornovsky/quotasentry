@@ -109,13 +109,29 @@ public class MySqlDataRepository extends RdbDataRepository implements DataReposi
         return users;
     }
 
+    public void removeAllSoftDeletedUsers() {
+        executeSql(
+                userSqlQueriesHolder.getRemoveAllSoftDeletedUsersSql(),
+                "All soft deleted users removed",
+                "Failed to remove the soft delete users"
+        );
+    }
+
     public void deleteDataFromDb() {
+        executeSql(
+                userSqlQueriesHolder.getDeleteAllUsersSql(),
+                "All users deleted",
+                "Failed to delete users"
+        );
+    }
+
+    private void executeSql(String sqlQuery, String successMessage, String failureMessage) {
         try (Connection connection = connectionProvider.getConnection();
-             PreparedStatement statement = connection.prepareStatement(userSqlQueriesHolder.getDeleteAllUsersSql())) {
+             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
             statement.executeUpdate();
-            log.info("All users deleted");
+            log.info(successMessage);
         } catch (SQLException e) {
-            handleSqlException(e, "Failed to delete users");
+            handleSqlException(e, failureMessage);
         }
     }
 

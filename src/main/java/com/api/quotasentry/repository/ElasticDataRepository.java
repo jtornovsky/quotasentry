@@ -103,6 +103,10 @@ public class ElasticDataRepository implements DataRepository {
         return getUsersWithoutDeleted();
     }
 
+    public void removeAllSoftDeletedUsers() {
+        usersMap.entrySet().removeIf(entry -> entry.getValue().isDeleted());
+    }
+
     private List<User> getUsersWithoutDeleted() {
         return usersMap.values().stream()
                 .filter(user -> !user.isDeleted())

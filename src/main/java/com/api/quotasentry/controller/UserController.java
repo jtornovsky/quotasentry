@@ -1,15 +1,16 @@
 package com.api.quotasentry.controller;
 
 import com.api.quotasentry.dto.UserDTO;
+import com.api.quotasentry.model.User;
 import com.api.quotasentry.service.DbService;
-import com.api.quotasentry.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
 
     private final DbService dbService;
@@ -27,8 +28,14 @@ public class UserController {
      */
     @DeleteMapping("delete/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable String userId) {
-        dbService.deleteUser(userId);
-        return ResponseEntity.ok().body("User deleted " + userId);
+        try {
+            dbService.deleteUser(userId);
+            return ResponseEntity.ok().body("User deleted successfully");
+        } catch (Exception e) {
+            log.error("Error deleting user with id {}", userId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting user: " + e.getMessage());
+        }
     }
 
     /**
@@ -38,20 +45,43 @@ public class UserController {
      *
      * @return
      */
-    @GetMapping("get/{userId}")
-    public ResponseEntity<String> getUser(@PathVariable String userId) {
-        UserDTO userDTO = dbService.getUser(userId);
-        return ResponseEntity.ok().body(JsonUtils.toJson(userDTO));
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable String userId) {
+        try {
+            UserDTO userDTO = dbService.getUser(userId);
+            if (userDTO != null) {
+                return ResponseEntity.ok().body(userDTO);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            log.error("Error retrieving user with id {}", userId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving user: " + e.getMessage());
+        }
     }
 
-//    @PostMapping("create")
-//    public ResponseEntity<String> createUser() {
-//        dbService.createUser();
-//        return ResponseEntity.ok().body("User created " + userId);
-//    }
-//
-//    public ResponseEntity<String> updateUser() {
-//        dbService.updateUser();
-//        return ResponseEntity.ok().body("User updated " + userId);
-//    }
+    @PostMapping("/create")
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            dbService.createUser(user);
+            return ResponseEntity.ok("User created successfully");
+        } catch (Exception e) {
+            log.error("Error creating user", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating user: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User user) {
+        try {
+            dbService.updateUser(id, user);
+            return ResponseEntity.ok("User updated successfully");
+        } catch (Exception e) {
+            log.error("Error updating user with id {}", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating user: " + e.getMessage());
+        }
+    }
 }
