@@ -19,12 +19,10 @@ import java.util.List;
 class ElasticDataService implements DataService, AdminDataService, SyncDataService {
 
     private final UserElasticDataInMemoryRepository userElasticDataInMemoryRepository;
-    private final UserInitialDataService userInitialDataService;
 
     @Autowired
-    ElasticDataService(UserElasticDataInMemoryRepository userElasticDataInMemoryRepository, UserInitialDataService userInitialDataService) {
+    ElasticDataService(UserElasticDataInMemoryRepository userElasticDataInMemoryRepository) {
         this.userElasticDataInMemoryRepository = userElasticDataInMemoryRepository;
-        this.userInitialDataService = userInitialDataService;
     }
 
     @Override

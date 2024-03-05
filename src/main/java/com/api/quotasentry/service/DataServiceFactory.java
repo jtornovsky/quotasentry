@@ -79,8 +79,8 @@ class DataServiceFactory {
      * @param isActiveService Whether the service is currently active or not.
      * @return The DataService based on the current time and service activity.
      */
-    private DataService getDataService(boolean isActiveService) {
-        LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
+    DataService getDataService(boolean isActiveService) {
+        LocalDateTime currentTime = getCurrentTime();
         DbType dbType = getDbType(currentTime, isActiveService);
         switch (dbType) {
             case Mysql -> {
@@ -100,7 +100,7 @@ class DataServiceFactory {
      * @param isActiveService Whether the service is currently active or not.
      * @return The DbType based on the current time and service activity.
      */
-    private DbType getDbType(LocalDateTime currentTime, boolean isActiveService) {
+    DbType getDbType(LocalDateTime currentTime, boolean isActiveService) {
         // implements logic to check if the current time is within the MySQL time range (from 9:00 - 17:00 UTC)
         if (currentTime.getHour() >= MY_SQL_DB_START_HOUR && currentTime.getHour() < MY_SQL_DB_END_HOUR) {
             if (isActiveService) {
@@ -113,5 +113,9 @@ class DataServiceFactory {
             }
             return DbType.Mysql;
         }
+    }
+
+    LocalDateTime getCurrentTime() {
+        return LocalDateTime.now(ZoneOffset.UTC);
     }
 }
